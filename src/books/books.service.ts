@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Book } from './books.types';
 import { BOOKS } from '../data/book';
-import { find, from, mergeMap, Observable, of, throwError } from 'rxjs';
+import { find, from, map, mergeMap, Observable, of, throwError } from 'rxjs';
 
 @Injectable()
 export class BooksService {
@@ -22,6 +22,11 @@ export class BooksService {
           ? of(b)
           : throwError(() => new NotFoundException(`No Book with id'${id}'.`)),
       ),
+    );
+
+  findAll = (): Observable<Book[] | void> =>
+    of(this._book).pipe(
+      map((books: Book[]) => (!!books && !!books.length ? books : undefined)),
     );
 
   private _parseDate = (date: string): number => {

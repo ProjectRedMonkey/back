@@ -11,4 +11,9 @@ export class BooksController {
   findOne(@Param('id') id: string): Observable<Book> {
     return this._bookService.findOne(id);
   }
+
+  @Get()
+  findAll(): Observable<Book[] | void> {
+    return this._bookService.findAll();
+  }
 }
