@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Book } from './books.types';
 import { BOOKS } from '../data/book';
 import {
@@ -8,9 +12,11 @@ import {
   map,
   mergeMap,
   Observable,
-  of, tap,
-  throwError
-} from "rxjs";
+  of,
+  tap,
+  throwError,
+} from 'rxjs';
+import { CreateBookDto } from './dto/create-book.dto';
 
 @Injectable()
 export class BooksService {
@@ -44,6 +50,33 @@ export class BooksService {
       map(() => undefined),
     );
 
+  create = (book: CreateBookDto): Observable<Book> =>
+    from(this._book).pipe(
+      find(
+        (b: Book) =>
+          b.title.toLowerCase() === book.title.toLowerCase() &&
+          b.author.toLowerCase() === book.author.toLowerCase(),
+      ),
+      mergeMap((b: Book) =>
+        !!b
+          ? throwError(
+              () =>
+                new ConflictException(
+                  `already a book with title '${b.title}' and the author '${b.author}'.`,
+                ),
+            )
+          : this._addBook(b),
+      ),
+    );
+
+  private _addBook = (book: Book): Observable<Book> =>
+    of({
+      ...book,
+      id: this._createId(),
+      date: this._parseDate('11/01/1999'),
+    }).pipe(tap((b: Book) => (this._book = this._book.concat(b))));
+
+  private _createId = (): string => `${new Date().getTime()}`;
   private _findBookIndex = (id: string): Observable<number> =>
     from(this._book).pipe(
       findIndex((b: Book) => b.id === id),
