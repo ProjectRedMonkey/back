@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Delete, Get, Param } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { Observable } from 'rxjs';
 import { Book } from './books.types';
@@ -15,5 +15,10 @@ export class BooksController {
   @Get()
   findAll(): Observable<Book[] | void> {
     return this._bookService.findAll();
+  }
+
+  @Delete(':id')
+  delete(@Param('id') id: string): Observable<void> {
+    return this._bookService.delete(id);
   }
 }
