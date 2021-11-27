@@ -17,6 +17,7 @@ import {
   throwError,
 } from 'rxjs';
 import { CreateBookDto } from './dto/create-book.dto';
+import { UpdateBookDto } from './dto/update-book.dto';
 
 @Injectable()
 export class BooksService {
@@ -67,6 +68,18 @@ export class BooksService {
             )
           : this._addBook(book),
       ),
+    );
+
+  update = (id: string, book: UpdateBookDto): Observable<Book> =>
+    from(this._books).pipe(
+      find((b: Book) => b.id === id),
+      mergeMap((b: Book) =>
+        !!b
+          ? this._findBookIndex(id)
+          : throwError(() => new ConflictException(`No Book with id'${id}'.`)),
+      ),
+      tap((index: number) => Object.assign(this._books[index], book)),
+      map((index: number) => this._books[index]),
     );
 
   private _addBook = (book: CreateBookDto): Observable<Book> =>

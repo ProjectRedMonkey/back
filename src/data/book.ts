@@ -7,8 +7,10 @@ export const BOOKS = [
     author: 'J.R.R. Tolkien',
     category: 'Fantasy',
     date: '29/07/1954',
-    extract:
+    extract: [
       "Le monde est en vérité empli de périls, et il y a en lui maints lieux sombres ; mais il y en a encore beaucoup de beaux, et quoique dans tous les pays l'amour se mêle maintenant d'affliction, il n'en devient peut-être que plus grand.",
+      'deuxie estrait',
+    ],
   },
   {
     id: '1',
