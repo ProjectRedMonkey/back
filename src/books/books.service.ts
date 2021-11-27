@@ -72,11 +72,16 @@ export class BooksService {
 
   update = (id: string, book: UpdateBookDto): Observable<Book> =>
     from(this._books).pipe(
-      find((b: Book) => b.id === id),
+      find(
+        (b: Book) =>
+          b.id !== id &&
+          b.title.toLowerCase() === book.title.toLowerCase() &&
+          b.author.toLowerCase() === book.author.toLowerCase(),
+      ),
       mergeMap((b: Book) =>
         !!b
-          ? this._findBookIndex(id)
-          : throwError(() => new ConflictException(`No Book with id'${id}'.`)),
+          ? throwError(() => new ConflictException(`No Book with id'${id}'.`))
+          : this._findBookIndex(id),
       ),
       tap((index: number) => Object.assign(this._books[index], book)),
       map((index: number) => this._books[index]),
