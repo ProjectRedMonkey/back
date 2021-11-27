@@ -20,17 +20,17 @@ import { CreateBookDto } from './dto/create-book.dto';
 
 @Injectable()
 export class BooksService {
-  private _book: Book[];
+  private _books: Book[];
 
   constructor() {
-    this._book = [].concat(BOOKS).map((book) => ({
+    this._books = [].concat(BOOKS).map((book) => ({
       ...book,
       date: this._parseDate(book.date),
     }));
   }
 
   findOne = (id: string): Observable<Book> =>
-    from(this._book).pipe(
+    from(this._books).pipe(
       find((b: Book) => b.id === id),
       mergeMap((b: Book) =>
         !!b
@@ -40,18 +40,18 @@ export class BooksService {
     );
 
   findAll = (): Observable<Book[] | void> =>
-    of(this._book).pipe(
+    of(this._books).pipe(
       map((books: Book[]) => (!!books && !!books.length ? books : undefined)),
     );
 
   delete = (id: string): Observable<void> =>
     this._findBookIndex(id).pipe(
-      tap((i: number) => this._book.slice(i, 1)),
+      tap((index: number) => this._books.splice(index, 1)),
       map(() => undefined),
     );
 
   create = (book: CreateBookDto): Observable<Book> =>
-    from(this._book).pipe(
+    from(this._books).pipe(
       find(
         (b: Book) =>
           b.title.toLowerCase() === book.title.toLowerCase() &&
@@ -65,20 +65,20 @@ export class BooksService {
                   `already a book with title '${b.title}' and the author '${b.author}'.`,
                 ),
             )
-          : this._addBook(b),
+          : this._addBook(book),
       ),
     );
 
-  private _addBook = (book: Book): Observable<Book> =>
+  private _addBook = (book: CreateBookDto): Observable<Book> =>
     of({
       ...book,
       id: this._createId(),
       date: this._parseDate('11/01/1999'),
-    }).pipe(tap((b: Book) => (this._book = this._book.concat(b))));
+    }).pipe(tap((b: Book) => (this._books = this._books.concat(b))));
 
   private _createId = (): string => `${new Date().getTime()}`;
   private _findBookIndex = (id: string): Observable<number> =>
-    from(this._book).pipe(
+    from(this._books).pipe(
       findIndex((b: Book) => b.id === id),
       mergeMap((i: number) =>
         i >= 0
