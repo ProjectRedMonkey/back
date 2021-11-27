@@ -1,34 +1,71 @@
 import { IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateBookDto {
+  @ApiProperty({
+    name: 'photo',
+    description: 'url of the Book picture ',
+    example: 'https://images-na.ssl-images-amazon.com/images/I/71xwnDO9PBL.jpg',
+  })
   @IsString()
   @IsOptional()
   @IsNotEmpty()
   photo?: string;
 
+  @ApiProperty({
+    name: 'title',
+    description: 'title of the book',
+    example: 'Voyage au bout de la nuit',
+  })
   @IsString()
   @IsNotEmpty()
   title: string;
 
+  @ApiProperty({
+    name: 'author',
+    description: 'author of the book',
+    example: 'Celine',
+  })
   @IsString()
   @IsNotEmpty()
   author: string;
 
+  @ApiProperty({
+    name: 'category',
+    description: 'categories of this book',
+    example: 'philosophy',
+  })
   @IsString()
   @IsOptional()
   @IsNotEmpty()
   category?: string;
 
+  @ApiProperty({
+    name: 'date',
+    description: 'date of publishing of this book',
+    example: '11/01/1900',
+  })
   @IsDate()
   @IsOptional()
   @IsNotEmpty()
-  date?: number;
+  date?: string;
 
+  @ApiProperty({
+    name: 'extract',
+    description: 'different extract of this book',
+    example: '[il marcher dans la nuit ...] [le soleil se leve avec joi]',
+  })
   @IsString()
   @IsOptional()
   @IsNotEmpty()
   extract?: string[];
 
+  @ApiProperty({
+    name: 'commentsId',
+    description:
+      '[NumExtract][NumComment]list of all the comments of eatch extract',
+    example: '[1][2] => 23234342323',
+  })
   @IsNotEmpty()
   @IsOptional()
   @IsNotEmpty()

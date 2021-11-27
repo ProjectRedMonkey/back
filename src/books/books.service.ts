@@ -18,6 +18,7 @@ import {
 } from 'rxjs';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
+import { BookEntity } from './entities/book.entity';
 
 @Injectable()
 export class BooksService {
@@ -30,7 +31,7 @@ export class BooksService {
     }));
   }
 
-  findOne = (id: string): Observable<Book> =>
+  findOne = (id: string): Observable<BookEntity> =>
     from(this._books).pipe(
       find((b: Book) => b.id === id),
       mergeMap((b: Book) =>
@@ -51,7 +52,7 @@ export class BooksService {
       map(() => undefined),
     );
 
-  create = (book: CreateBookDto): Observable<Book> =>
+  create = (book: CreateBookDto): Observable<BookEntity> =>
     from(this._books).pipe(
       find(
         (b: Book) =>
@@ -70,7 +71,7 @@ export class BooksService {
       ),
     );
 
-  update = (id: string, book: UpdateBookDto): Observable<Book> =>
+  update = (id: string, book: UpdateBookDto): Observable<BookEntity> =>
     from(this._books).pipe(
       find(
         (b: Book) =>
@@ -87,11 +88,10 @@ export class BooksService {
       map((index: number) => this._books[index]),
     );
 
-  private _addBook = (book: CreateBookDto): Observable<Book> =>
+  private _addBook = (book: CreateBookDto): Observable<BookEntity> =>
     of({
       ...book,
       id: this._createId(),
-      date: this._parseDate('11/01/1999'),
     }).pipe(tap((b: Book) => (this._books = this._books.concat(b))));
 
   private _createId = (): string => `${new Date().getTime()}`;

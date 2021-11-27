@@ -4,7 +4,7 @@ export type Book = {
   title: string;
   author: string;
   category: string;
-  date: number;
+  date: string;
   extract: string[];
   commentsId?: string[][];
 };

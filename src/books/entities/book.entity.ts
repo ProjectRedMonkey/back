@@ -1,23 +1,24 @@
-import {
-  ArrayNotEmpty,
-  Contains,
-  IsDate,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { Exclude, Expose, Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateBookDto {
+@Exclude()
+export class BookEntity {
+  @ApiProperty({
+    name: 'id',
+    description: 'Unique identifier in the database',
+    example: '432dc378a38A2323aze87737',
+  })
+  @Expose()
+  @Type(() => String)
+  id: string;
+
   @ApiProperty({
     name: 'photo',
-    description: 'url of the Book picture ',
+    description: 'url to a picture of the book',
     example: 'https://images-na.ssl-images-amazon.com/images/I/71xwnDO9PBL.jpg',
   })
-  @Contains('.jpg')
-  @IsString()
-  @IsOptional()
-  @IsNotEmpty()
+  @Expose()
+  @Type(() => String)
   photo?: string;
 
   @ApiProperty({
@@ -25,8 +26,8 @@ export class CreateBookDto {
     description: 'title of the book',
     example: 'Voyage au bout de la nuit',
   })
-  @IsString()
-  @IsNotEmpty()
+  @Expose()
+  @Type(() => String)
   title: string;
 
   @ApiProperty({
@@ -34,8 +35,8 @@ export class CreateBookDto {
     description: 'author of the book',
     example: 'Celine',
   })
-  @IsString()
-  @IsNotEmpty()
+  @Expose()
+  @Type(() => String)
   author: string;
 
   @ApiProperty({
@@ -43,8 +44,8 @@ export class CreateBookDto {
     description: 'categories of this book',
     example: 'philosophy',
   })
-  @IsString()
-  @IsNotEmpty()
+  @Expose()
+  @Type(() => String)
   category: string;
 
   @ApiProperty({
@@ -52,8 +53,8 @@ export class CreateBookDto {
     description: 'date of publishing of this book',
     example: '11/01/1900',
   })
-  @IsDate()
-  @IsNotEmpty()
+  @Expose()
+  @Type(() => String)
   date: string;
 
   @ApiProperty({
@@ -61,7 +62,21 @@ export class CreateBookDto {
     description: 'different extract of this book',
     example: '[il marcher dans la nuit ...] [le soleil se leve avec joi]',
   })
-  @IsString()
-  @ArrayNotEmpty()
+  @Expose()
+  @Type(() => Array) // or string ?
   extract: string[];
+
+  @ApiProperty({
+    name: 'commentsId',
+    description:
+      '[NumExtract][NumComment]list of all the comments of eatch extract',
+    example: '[1][2] => 23234342323',
+  })
+  @Expose()
+  @Type(() => Array) // or string ?
+  commentsId?: string[][];
+
+  constructor(partial: Partial<BookEntity>) {
+    Object.assign(this, partial);
+  }
 }
