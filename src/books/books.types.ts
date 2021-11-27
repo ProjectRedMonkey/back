@@ -6,5 +6,5 @@ export type Book = {
   category: string;
   date: number;
   extract: string[];
-  commentsId?: string;
+  commentsId?: string[][];
 };

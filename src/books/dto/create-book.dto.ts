@@ -5,5 +5,4 @@ export class CreateBookDto {
   category: string;
   date: number;
   extract: string[];
-  commentsId?: string;
 }

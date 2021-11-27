@@ -1,6 +1,6 @@
-export class Comments {
-  id: string;
+export class UpdateCommentDto {
   author: string;
-  date?: number;
+  date: number;
   upVote?: number; // see if use
+  text?: string;
 }
