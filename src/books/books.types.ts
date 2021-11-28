@@ -5,6 +5,6 @@ export type Book = {
   author: string;
   category: string;
   date: number;
-  extract: string[];
+  extract: string;
   commentsId?: string[][];
 };

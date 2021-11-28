@@ -26,11 +26,10 @@ export class CreateBookDto {
   @IsNotEmpty()
   category: string;
 
-  @IsDate()
   @IsNotEmpty()
   date: number;
 
   @IsString()
-  @ArrayNotEmpty()
-  extract: string[];
+  @IsNotEmpty()
+  extract: string;
 }
