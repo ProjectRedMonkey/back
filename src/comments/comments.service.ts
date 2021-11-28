@@ -100,6 +100,7 @@ export class CommentsService {
     of({
       ...comment,
       date: this._parseDate('12/12/1212'),
+      id: this._createId(),
       upVote: 0,
     }).pipe(tap((c: Comment) => (this._comments = this._comments.concat(c))));
   private _findCommentIndex = (id: string): Observable<number> =>
