@@ -1,4 +1,10 @@
-import { IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+  IsMongoId,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateBookDto {
@@ -43,12 +49,12 @@ export class UpdateBookDto {
   @ApiProperty({
     name: 'date',
     description: 'date of publishing of this book',
-    example: '11/01/1900',
+    example: '11-01-1900',
   })
-  @IsDate()
+  @IsNumber()
   @IsOptional()
   @IsNotEmpty()
-  date?: string;
+  date?: number;
 
   @ApiProperty({
     name: 'extract',
@@ -58,7 +64,7 @@ export class UpdateBookDto {
   @IsString()
   @IsOptional()
   @IsNotEmpty()
-  extract?: string[];
+  extract?: string;
 
   @ApiProperty({
     name: 'commentsId',
@@ -66,7 +72,7 @@ export class UpdateBookDto {
       '[NumExtract][NumComment]list of all the comments of eatch extract',
     example: '[1][2] => 23234342323',
   })
-  @IsNotEmpty()
+  @IsMongoId()
   @IsOptional()
   @IsNotEmpty()
   commentsId?: string;

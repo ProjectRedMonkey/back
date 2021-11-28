@@ -2,99 +2,97 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  UnprocessableEntityException,
 } from '@nestjs/common';
-import { Book } from './books.types';
-import { BOOKS } from '../data/book';
 import {
-  find,
-  findIndex,
-  from,
+  catchError,
+  defaultIfEmpty,
   map,
   mergeMap,
   Observable,
   of,
-  tap,
   throwError,
 } from 'rxjs';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { BookEntity } from './entities/book.entity';
+import { BooksDao } from './dao/books.dao';
+import { Book } from './schemas/book.schema';
+import { filter } from 'rxjs/operators';
 
 @Injectable()
 export class BooksService {
-  private _books: Book[];
-
-  constructor() {
-    this._books = [].concat(BOOKS).map((book) => ({
-      ...book,
-      date: this._parseDate(book.date),
-    }));
-  }
+  constructor(private readonly _booksDao: BooksDao) {}
 
   findOne = (id: string): Observable<BookEntity> =>
-    from(this._books).pipe(
-      find((b: Book) => b.id === id),
+    this._booksDao.findOneById(id).pipe(
+      catchError((e) =>
+        throwError(() => new UnprocessableEntityException(e.message)),
+      ),
       mergeMap((b: Book) =>
         !!b
-          ? of(b)
+          ? of(new BookEntity(b))
           : throwError(() => new NotFoundException(`No Book with id'${id}'.`)),
       ),
     );
 
-  findAll = (): Observable<Book[] | void> =>
-    of(this._books).pipe(
-      map((books: Book[]) => (!!books && !!books.length ? books : undefined)),
+  findAll = (): Observable<BookEntity[] | void> =>
+    this._booksDao.find().pipe(
+      filter((_: Book[]) => !!_),
+      map((_: Book[]) => _.map((__: Book) => new BookEntity(__))),
+      defaultIfEmpty(undefined),
     );
 
   delete = (id: string): Observable<void> =>
-    this._findBookIndex(id).pipe(
-      tap((index: number) => this._books.splice(index, 1)),
-      map(() => undefined),
+    this._booksDao.findByIdAndRemove(id).pipe(
+      catchError((e) =>
+        throwError(() => new UnprocessableEntityException(e.message)),
+      ),
+      mergeMap((b: Book) =>
+        !!b
+          ? of(undefined)
+          : throwError(() => new NotFoundException(`No Book with id'${id}'.`)),
+      ),
     );
 
   create = (book: CreateBookDto): Observable<BookEntity> =>
-    from(this._books).pipe(
-      find(
-        (b: Book) =>
-          b.title.toLowerCase() === book.title.toLowerCase() &&
-          b.author.toLowerCase() === book.author.toLowerCase(),
-      ),
-      mergeMap((b: Book) =>
-        !!b
+    this._addBook(book).pipe(
+      mergeMap((b: CreateBookDto) => this._booksDao.save(b)),
+      catchError((e) =>
+        e.code === 11000
           ? throwError(
-              () =>
-                new ConflictException(
-                  `already a book with title '${b.title}' and the author '${b.author}'.`,
-                ),
+              () => new ConflictException(`conflic whith another book`),
             )
-          : this._addBook(book),
+          : throwError(() => new UnprocessableEntityException(e.message)),
       ),
+      map((b: Book) => new BookEntity(b)),
     );
 
   update = (id: string, book: UpdateBookDto): Observable<BookEntity> =>
-    from(this._books).pipe(
-      find(
-        (b: Book) =>
-          b.id !== id &&
-          b.title.toLowerCase() === book.title.toLowerCase() &&
-          b.author.toLowerCase() === book.author.toLowerCase(),
+    this._booksDao.findOneByIdAndUpdate(id, book).pipe(
+      catchError((e) =>
+        e.code === 11000
+          ? throwError(
+              () => new ConflictException(`conflic whith another book`),
+            )
+          : throwError(() => new UnprocessableEntityException(e.message)),
       ),
       mergeMap((b: Book) =>
         !!b
-          ? throwError(() => new ConflictException(`No Book with id'${id}'.`))
-          : this._findBookIndex(id),
+          ? of(new BookEntity(b))
+          : throwError(() => new NotFoundException(`No Book with id'${id}'.`)),
       ),
-      tap((index: number) => Object.assign(this._books[index], book)),
-      map((index: number) => this._books[index]),
     );
 
-  private _addBook = (book: CreateBookDto): Observable<BookEntity> =>
+  private _addBook = (book: CreateBookDto): Observable<CreateBookDto> =>
     of({
       ...book,
-      id: this._createId(),
-    }).pipe(tap((b: Book) => (this._books = this._books.concat(b))));
+      photo:
+        'https://islandpress.org/sites/default/files/default_book_cover_2015.jpg',
+    });
 
-  private _createId = (): string => `${new Date().getTime()}`;
+  // private _createId = (): string => `${new Date().getTime()}`;
+  /*
   private _findBookIndex = (id: string): Observable<number> =>
     from(this._books).pipe(
       findIndex((b: Book) => b.id === id),
@@ -104,9 +102,10 @@ export class BooksService {
           : throwError(() => new NotFoundException(`no book with id '${id}'.`)),
       ),
     );
-
   private _parseDate = (date: string): number => {
     const dates = date.split('/');
     return new Date(dates[2] + '/' + dates[1] + '/' + dates[0]).getTime();
   };
+  
+   */
 }

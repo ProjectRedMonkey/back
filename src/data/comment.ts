@@ -7,6 +7,7 @@ export const COMMENTS = [
     end: 23,
     upVote: 10, // see if use
     text: 'je comprend pas cette partie',
+    idOfBook: '0',
   },
   {
     id: '1',
@@ -16,6 +17,7 @@ export const COMMENTS = [
     end: 23,
     upVote: 10, // see if use
     text: 'il demontre que',
+    idOfBook: '0',
   },
   {
     id: '2',
@@ -24,5 +26,6 @@ export const COMMENTS = [
     start: 22,
     end: 30,
     text: 'vraiment génial',
+    idOfBook: '1',
   },
 ];

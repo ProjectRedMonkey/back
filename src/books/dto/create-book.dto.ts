@@ -1,8 +1,7 @@
 import {
-  ArrayNotEmpty,
   Contains,
-  IsDate,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
 } from 'class-validator';
@@ -14,7 +13,7 @@ export class CreateBookDto {
     description: 'url of the Book picture ',
     example: 'https://images-na.ssl-images-amazon.com/images/I/71xwnDO9PBL.jpg',
   })
-  @Contains('.jpg')
+  @Contains('.jpg' || '.jpeg' || '.gif' || '.png')
   @IsString()
   @IsOptional()
   @IsNotEmpty()
@@ -52,9 +51,9 @@ export class CreateBookDto {
     description: 'date of publishing of this book',
     example: '11/01/1900',
   })
-  @IsDate()
+  @IsNumber()
   @IsNotEmpty()
-  date: string;
+  date: number;
 
   @ApiProperty({
     name: 'extract',
@@ -62,6 +61,6 @@ export class CreateBookDto {
     example: '[il marcher dans la nuit ...] [le soleil se leve avec joi]',
   })
   @IsString()
-  @ArrayNotEmpty()
-  extract: string[];
+  @IsNotEmpty()
+  extract: string;
 }

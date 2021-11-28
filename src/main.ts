@@ -9,6 +9,7 @@ import * as Config from 'config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { BooksModule } from './books/books.module';
 import { AppConfig, SwaggerConfig } from './app.types';
+import { CommentsModule } from './comments/comments.module';
 async function bootstrap(config: AppConfig, swaggerConfig: SwaggerConfig) {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
@@ -26,10 +27,10 @@ async function bootstrap(config: AppConfig, swaggerConfig: SwaggerConfig) {
     .setVersion(swaggerConfig.version)
     .build();
 
-  const booksDocument = SwaggerModule.createDocument(app, option, {
-    include: [BooksModule],
+  const document = SwaggerModule.createDocument(app, option, {
+    include: [BooksModule, CommentsModule],
   });
-  SwaggerModule.setup(swaggerConfig.path, app, booksDocument);
+  SwaggerModule.setup(swaggerConfig.path, app, document);
 
   app.enableCors();
   await app.listen(config.port, config.host);

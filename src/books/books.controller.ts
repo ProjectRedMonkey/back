@@ -11,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { Observable } from 'rxjs';
-import { Book } from './books.types';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import {
@@ -51,7 +50,7 @@ export class BooksController {
     allowEmptyValue: false,
   })
   @Get(':id')
-  findOne(@Param() params: HandlerParams): Observable<Book> {
+  findOne(@Param() params: HandlerParams): Observable<BookEntity> {
     return this._bookService.findOne(params.id);
   }
 
@@ -62,7 +61,7 @@ export class BooksController {
   })
   @ApiNoContentResponse({ description: 'the DB is empty' })
   @Get()
-  findAll(): Observable<Book[] | void> {
+  findAll(): Observable<BookEntity[] | void> {
     return this._bookService.findAll();
   }
 
@@ -92,7 +91,7 @@ export class BooksController {
     type: CreateBookDto,
   })
   @Post()
-  create(@Body() createBookDto: CreateBookDto): Observable<Book> {
+  create(@Body() createBookDto: CreateBookDto): Observable<BookEntity> {
     return this._bookService.create(createBookDto);
   }
 
@@ -115,7 +114,7 @@ export class BooksController {
   update(
     @Param() params: HandlerParams,
     @Body() updateBookDto: UpdateBookDto,
-  ): Observable<Book> {
+  ): Observable<BookEntity> {
     return this._bookService.update(params.id, updateBookDto);
   }
 }

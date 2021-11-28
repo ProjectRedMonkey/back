@@ -1,5 +1,6 @@
 import { Exclude, Expose, Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsOptional } from 'class-validator';
 
 @Exclude()
 export class BookEntity {
@@ -54,8 +55,8 @@ export class BookEntity {
     example: '11/01/1900',
   })
   @Expose()
-  @Type(() => String)
-  date: string;
+  @Type(() => Number)
+  date: number;
 
   @ApiProperty({
     name: 'extract',
@@ -63,8 +64,8 @@ export class BookEntity {
     example: '[il marcher dans la nuit ...] [le soleil se leve avec joi]',
   })
   @Expose()
-  @Type(() => Array) // or string ?
-  extract: string[];
+  @Type(() => String) // or string ?
+  extract: string;
 
   @ApiProperty({
     name: 'commentsId',
@@ -73,8 +74,9 @@ export class BookEntity {
     example: '[1][2] => 23234342323',
   })
   @Expose()
-  @Type(() => Array) // or string ?
-  commentsId?: string[][];
+  @IsOptional()
+  @Type(() => String) // or string ?
+  commentsId?: string;
 
   constructor(partial: Partial<BookEntity>) {
     Object.assign(this, partial);

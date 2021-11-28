@@ -6,4 +6,5 @@ export type Comment = {
   end: number;
   text: string;
   upVote?: number; // see if use
+  idOfBook: string;
 };

@@ -6,3 +6,5 @@ swagger:
   description: The Web Site where you can comment extract of book
   version: 1.0
   path: documentation
+mongodb:
+  uri: mongodb://0.0.0.0:27017/projetWebDB

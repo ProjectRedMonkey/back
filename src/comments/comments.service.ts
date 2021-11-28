@@ -6,6 +6,7 @@ import {
 import { COMMENTS } from '../data/comment';
 import { Comment } from './comments.types';
 import {
+  defaultIfEmpty,
   find,
   findIndex,
   from,
@@ -18,29 +19,37 @@ import {
 } from 'rxjs';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
+import { CommentEntity } from './entities/comment.entity';
+import { filter } from 'rxjs/operators';
+import { Comment as CommentSchema } from '../comments/schemas/comment.schema';
+import { CommentsDao } from './dao/comments.dao';
 
 @Injectable()
 export class CommentsService {
   private _comments: Comment[];
 
-  constructor() {
+  constructor(private readonly _commentsDao: CommentsDao) {
     this._comments = [].concat(COMMENTS).map((comment) => ({
       ...comment,
       date: this._parseDate(comment.date),
     }));
   }
 
-  findAll = (): Observable<Comment[] | void> =>
-    of(this._comments).pipe(
-      map((c: Comment[]) => (!!c && !!c.length ? c : undefined)),
+  findAll = (): Observable<CommentEntity[] | void> =>
+    this._commentsDao.find().pipe(
+      filter((_: CommentSchema[]) => !!_),
+      map((_: CommentSchema[]) =>
+        _.map((__: CommentSchema) => new CommentEntity(__)),
+      ),
+      defaultIfEmpty(undefined),
     );
 
-  findOneById = (id: string): Observable<Comment> =>
+  findOneById = (id: string): Observable<CommentEntity> =>
     from(this._comments).pipe(
       find((c: Comment) => c.id === id),
       mergeMap((c: Comment) =>
         !!c
-          ? of(c)
+          ? of(new CommentEntity(c))
           : throwError(
               () => new NotFoundException(`No comment whith the id '${id}'`),
             ),
@@ -53,7 +62,7 @@ export class CommentsService {
       map(() => undefined),
     );
 
-  create = (comment: CreateCommentDto): Observable<Comment> =>
+  create = (comment: CreateCommentDto): Observable<CommentEntity> =>
     from(this._comments).pipe(
       find(
         (c: Comment) =>
@@ -74,7 +83,7 @@ export class CommentsService {
       ),
     );
 
-  update = (id: string, comment: UpdateCommentDto): Observable<Comment> =>
+  update = (id: string, comment: UpdateCommentDto): Observable<CommentEntity> =>
     from(this._comments).pipe(
       find(
         (c: Comment) =>
@@ -92,17 +101,22 @@ export class CommentsService {
             ),
       ),
       tap((index: number) => Object.assign(this._comments[index], comment)),
-      map((index: number) => this._comments[index]),
+      map((index: number) => new CommentEntity(this._comments[index])),
     );
 
   private _createId = (): string => `${new Date().getTime()}`;
-  private _addComment = (comment: CreateCommentDto): Observable<Comment> =>
+  private _addComment = (
+    comment: CreateCommentDto,
+  ): Observable<CommentEntity> =>
     of({
       ...comment,
       date: this._parseDate('12/12/1212'),
       id: this._createId(),
       upVote: 0,
-    }).pipe(tap((c: Comment) => (this._comments = this._comments.concat(c))));
+    }).pipe(
+      tap((c: Comment) => (this._comments = this._comments.concat(c))),
+      map((c: Comment) => new CommentEntity(c)),
+    );
   private _findCommentIndex = (id: string): Observable<number> =>
     from(this._comments).pipe(
       findIndex((c: Comment) => c.id === id),
