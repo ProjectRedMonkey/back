@@ -49,16 +49,6 @@ export class CommentEntity {
   text: string;
 
   @ApiProperty({
-    name: 'commentsId',
-    description:
-      '[NumExtract][NumComment]list of all the comments of eatch extract',
-    example: '[1][2] => 23234342323',
-  })
-  @Expose()
-  @Type(() => String) // or string ?
-  commentsId?: string;
-
-  @ApiProperty({
     name: 'start',
     description: 'index of the start of the part of the text comment',
     example: '22',

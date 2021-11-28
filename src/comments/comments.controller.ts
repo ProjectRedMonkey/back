@@ -3,14 +3,15 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Delete,
-  Get,
+  Get, Logger,
+  NotFoundException,
   Param,
   Post,
   Put,
-  UseInterceptors,
-} from '@nestjs/common';
+  UseInterceptors
+} from "@nestjs/common";
 import { CommentsService } from './comments.service';
-import { Observable } from 'rxjs';
+import { mergeMap, Observable, throwError } from 'rxjs';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { CommentEntity } from './entities/comment.entity';
@@ -27,13 +28,19 @@ import {
 } from '@nestjs/swagger';
 import { HandlerParams } from '../validators/handler-params';
 import { HttpInterceptor } from '../interceptors/http.interceptor';
-
+import { AppConfig } from '../app.types';
+import { BookEntity } from '../books/entities/book.entity';
+import { HttpService } from '@nestjs/axios';
+import * as Config from 'config';
 @ApiTags('comments')
 @Controller('comments')
 @UseInterceptors(ClassSerializerInterceptor)
 @UseInterceptors(HttpInterceptor)
 export class CommentsController {
-  constructor(private readonly _commentService: CommentsService) {}
+  constructor(
+    private readonly _commentService: CommentsService,
+    private httpService: HttpService,
+  ) {}
 
   @ApiOkResponse({
     description: 'Returns the comment for the given "id"',
@@ -81,6 +88,22 @@ export class CommentsController {
     return this._commentService.delete(params.id);
   }
 
+  @ApiNoContentResponse({ description: 'Successful delete' })
+  @ApiNotFoundResponse({
+    description: 'Comment with the given "id" doesn\'t exist in the database',
+  })
+  @ApiBadRequestResponse({ description: 'Parameter provided is not good' })
+  @ApiParam({
+    name: 'id',
+    description: 'Unique identifier of the book',
+    type: String,
+    allowEmptyValue: false,
+  })
+  @Delete('allBooks/:id')
+  deleteAllFromBook(@Param() params: HandlerParams): Observable<void> {
+    Logger.log('delete al books : ' + params.id);
+    return this._commentService.deleteAllFromBook(params.id);
+  }
   @ApiCreatedResponse({
     description: 'Successful creat"',
     type: CommentEntity,
@@ -95,6 +118,18 @@ export class CommentsController {
   create(
     @Body() createCommentDto: CreateCommentDto,
   ): Observable<CommentEntity> {
+    this.httpService.get(
+      `http://${Config.get<AppConfig>('serverBooks').host}:${
+        Config.get<AppConfig>('serverBooks').port
+      }/books/` + createCommentDto.idOfBook,
+    )
+      ? this._commentService.create(createCommentDto)
+      : throwError(
+          () =>
+            new NotFoundException(
+              `No book with id'${createCommentDto.idOfBook}'.`,
+            ),
+        );
     return this._commentService.create(createCommentDto);
   }
 

@@ -4,15 +4,17 @@ import {
   Controller,
   Delete,
   Get,
+  Logger,
   Param,
   Post,
   Put,
   UseInterceptors,
 } from '@nestjs/common';
 import { BooksService } from './books.service';
-import { Observable } from 'rxjs';
+import { mergeMap, Observable } from 'rxjs';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
+import * as Config from 'config';
 import {
   ApiBadRequestResponse,
   ApiBody,
@@ -27,13 +29,18 @@ import {
 import { HttpInterceptor } from '../interceptors/http.interceptor';
 import { BookEntity } from './entities/book.entity';
 import { HandlerParams } from '../validators/handler-params';
+import { HttpService } from '@nestjs/axios';
+import { AppConfig } from '../app.types';
 
 @ApiTags('books')
 @Controller('books')
 @UseInterceptors(ClassSerializerInterceptor)
 @UseInterceptors(HttpInterceptor)
 export class BooksController {
-  constructor(private readonly _bookService: BooksService) {}
+  constructor(
+    private readonly _bookService: BooksService,
+    private httpService: HttpService,
+  ) {}
 
   @ApiOkResponse({
     description: 'Returns the book for the given "id"',
@@ -78,6 +85,22 @@ export class BooksController {
   })
   @Delete(':id')
   delete(@Param() params: HandlerParams): Observable<void> {
+    Logger.log(
+      'zeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee: ' +
+        params.id,
+    );
+
+    const s =
+      `http://${Config.get<AppConfig>('serverComments').host}:${
+        Config.get<AppConfig>('serverComments').port
+      }/comments/allBooks/`;
+    Logger.log(
+      'zeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeaaaaaaaaaaaee: ' + s,
+    );
+    this.findOne(params).pipe(
+      mergeMap((b: BookEntity) => this.httpService.delete(s + b.id)),
+    );
+
     return this._bookService.delete(params.id);
   }
   @ApiCreatedResponse({
