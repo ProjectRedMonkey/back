@@ -28,6 +28,16 @@ export class UpdateBookDto {
   title: string;
 
   @ApiProperty({
+    name: 'page',
+    description: 'page of the extract of the book',
+    example: '11',
+  })
+  @IsNumber()
+  @IsOptional()
+  @IsNotEmpty()
+  page?: number;
+
+  @ApiProperty({
     name: 'author',
     description: 'author of the book',
     example: 'Celine',

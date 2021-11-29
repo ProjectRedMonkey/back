@@ -57,6 +57,12 @@ export class Book {
   date: number;
 
   @Prop({
+    type: Number,
+    required: true,
+  })
+  page: number;
+
+  @Prop({
     type: String,
     required: true,
     trim: true,

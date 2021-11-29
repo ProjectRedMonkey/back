@@ -86,32 +86,10 @@ export class BooksController {
   })
   @Delete(':id')
   delete(@Param() params: HandlerParams): Observable<void> {
-    const s = `http://${Config.get<AppConfig>('serverComments').host}:${
-      Config.get<AppConfig>('serverComments').port
+    const s = `http://${Config.get<string>('serverComments').host}:${
+      Config.get<string>('serverComments').port
     }/comments/allBooks/`;
-    Logger.log(
-      'zeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee: ' +
-        params.id,
-    );
-    Logger.log(
-      'zeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeaaaaaaaaaaaee: ' + s,
-    );
-
     this.httpService.delete(s + params.id).subscribe(() => undefined);
-
-    /*
-    const s = `http://${Config.get<AppConfig>('serverComments').host}:${
-      Config.get<AppConfig>('serverComments').port
-    }/comments/`;
-    this.findOne(params).pipe(
-      tap((b: BookEntity) => Logger.log(b.id)),
-      map((b: BookEntity) =>
-        !!b ? this.httpService.delete(s + b.commentsId).subscribe() : undefined,
-      ),
-    );
-    
-     */
-    //return new Observable<void>().pipe(() => undefined);
     return this._bookService.delete(params.id);
   }
   @ApiCreatedResponse({

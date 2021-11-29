@@ -56,6 +56,15 @@ export class CreateBookDto {
   date: number;
 
   @ApiProperty({
+    name: 'page',
+    description: 'page of the extract of the book',
+    example: '11',
+  })
+  @IsNumber()
+  @IsNotEmpty()
+  page: number;
+
+  @ApiProperty({
     name: 'extract',
     description: 'different extract of this book',
     example: '[il marcher dans la nuit ...] [le soleil se leve avec joi]',

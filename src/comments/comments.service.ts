@@ -72,7 +72,6 @@ export class CommentsService {
       catchError((e) =>
         throwError(() => new UnprocessableEntityException(e.message)),
       ),
-
       mergeMap((b: Comment) =>
         !!b
           ? of(undefined)

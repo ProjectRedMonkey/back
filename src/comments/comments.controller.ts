@@ -102,7 +102,6 @@ export class CommentsController {
   })
   @Delete('allBooks/:id')
   deleteAllFromBook(@Param() params: HandlerParams): Observable<void> {
-    Logger.log('delete al books : ' + params.id);
     return this._commentService.deleteAllFromBook(params.id);
   }
   @ApiOkResponse({

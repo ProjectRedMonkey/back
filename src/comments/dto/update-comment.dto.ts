@@ -34,8 +34,7 @@ export class UpdateCommentDto {
     description: 'text of the comment',
     example: '21',
   })
-  @IsOptional()
   @IsNotEmpty()
   @IsString()
-  text?: string;
+  text: string;
 }

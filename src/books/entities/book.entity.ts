@@ -66,20 +66,16 @@ export class BookEntity {
   @Expose()
   @Type(() => String) // or string ?
   extract: string;
-/*
+
   @ApiProperty({
-    name: 'commentsId',
-    description:
-      '[NumExtract][NumComment]list of all the comments of eatch extract',
-    example: '[1][2] => 23234342323',
+    name: 'page',
+    description: 'page of the extract of the book',
+    example: '11',
   })
   @Expose()
-  @IsOptional()
-  @Type(() => String) // or string ?
-  commentsId?: string;
+  @Type(() => Number)
+  page: number;
 
-
- */
   constructor(partial: Partial<BookEntity>) {
     Object.assign(this, partial);
   }
