@@ -1,4 +1,4 @@
-import { IsMongoId, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateCommentDto {
@@ -48,9 +48,20 @@ export class CreateCommentDto {
   text: string;
 
   @ApiProperty({
+    name: 'upVote',
+    description: 'number of upVote for this comment ',
+    example: '11',
+  })
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsNumber()
+  upVote?: number; // see if use
+
+  @ApiProperty({
     name: 'idOfBook',
     description: 'the id of the book commented',
-    example: '244242325224',
+    example: '61a4c0121f102776e2cfa9b2',
   })
   @IsNotEmpty()
   @IsMongoId()

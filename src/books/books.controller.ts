@@ -31,6 +31,7 @@ import { BookEntity } from './entities/book.entity';
 import { HandlerParams } from '../validators/handler-params';
 import { HttpService } from '@nestjs/axios';
 import { AppConfig } from '../app.types';
+import { map, tap } from 'rxjs/operators';
 
 @ApiTags('books')
 @Controller('books')
@@ -85,22 +86,32 @@ export class BooksController {
   })
   @Delete(':id')
   delete(@Param() params: HandlerParams): Observable<void> {
+    const s = `http://${Config.get<AppConfig>('serverComments').host}:${
+      Config.get<AppConfig>('serverComments').port
+    }/comments/allBooks/`;
     Logger.log(
       'zeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee: ' +
         params.id,
     );
-
-    const s =
-      `http://${Config.get<AppConfig>('serverComments').host}:${
-        Config.get<AppConfig>('serverComments').port
-      }/comments/allBooks/`;
     Logger.log(
       'zeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeaaaaaaaaaaaee: ' + s,
     );
-    this.findOne(params).pipe(
-      mergeMap((b: BookEntity) => this.httpService.delete(s + b.id)),
-    );
 
+    this.httpService.delete(s + params.id).subscribe(() => undefined);
+
+    /*
+    const s = `http://${Config.get<AppConfig>('serverComments').host}:${
+      Config.get<AppConfig>('serverComments').port
+    }/comments/`;
+    this.findOne(params).pipe(
+      tap((b: BookEntity) => Logger.log(b.id)),
+      map((b: BookEntity) =>
+        !!b ? this.httpService.delete(s + b.commentsId).subscribe() : undefined,
+      ),
+    );
+    
+     */
+    //return new Observable<void>().pipe(() => undefined);
     return this._bookService.delete(params.id);
   }
   @ApiCreatedResponse({

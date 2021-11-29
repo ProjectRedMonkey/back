@@ -3,15 +3,16 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Delete,
-  Get, Logger,
+  Get,
+  Logger,
   NotFoundException,
   Param,
   Post,
   Put,
-  UseInterceptors
-} from "@nestjs/common";
+  UseInterceptors,
+} from '@nestjs/common';
 import { CommentsService } from './comments.service';
-import { mergeMap, Observable, throwError } from 'rxjs';
+import { mergeMap, Observable, of, throwError } from 'rxjs';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { CommentEntity } from './entities/comment.entity';
@@ -32,6 +33,7 @@ import { AppConfig } from '../app.types';
 import { BookEntity } from '../books/entities/book.entity';
 import { HttpService } from '@nestjs/axios';
 import * as Config from 'config';
+import { map } from 'rxjs/operators';
 @ApiTags('comments')
 @Controller('comments')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -104,35 +106,6 @@ export class CommentsController {
     Logger.log('delete al books : ' + params.id);
     return this._commentService.deleteAllFromBook(params.id);
   }
-  @ApiCreatedResponse({
-    description: 'Successful creat"',
-    type: CommentEntity,
-  })
-  @ApiConflictResponse({ description: 'the comment already exists' })
-  @ApiBadRequestResponse({ description: 'Parameter provided is not good' })
-  @ApiBody({
-    description: 'Payload to create a new comment',
-    type: CreateCommentDto,
-  })
-  @Post()
-  create(
-    @Body() createCommentDto: CreateCommentDto,
-  ): Observable<CommentEntity> {
-    this.httpService.get(
-      `http://${Config.get<AppConfig>('serverBooks').host}:${
-        Config.get<AppConfig>('serverBooks').port
-      }/books/` + createCommentDto.idOfBook,
-    )
-      ? this._commentService.create(createCommentDto)
-      : throwError(
-          () =>
-            new NotFoundException(
-              `No book with id'${createCommentDto.idOfBook}'.`,
-            ),
-        );
-    return this._commentService.create(createCommentDto);
-  }
-
   @ApiOkResponse({
     description: 'Successful update',
     type: CommentEntity,
@@ -154,5 +127,64 @@ export class CommentsController {
     @Body() updateCommentDto: UpdateCommentDto,
   ): Observable<CommentEntity> {
     return this._commentService.update(params.id, updateCommentDto);
+  }
+
+  @ApiCreatedResponse({
+    description: 'Successful creat"',
+    type: CommentEntity,
+  })
+  @ApiConflictResponse({ description: 'the comment already exists' })
+  @ApiBadRequestResponse({ description: 'Parameter provided is not good' })
+  @ApiBody({
+    description: 'Payload to create a new comment',
+    type: CreateCommentDto,
+  })
+  @Post()
+  create(
+    @Body() createCommentDto: CreateCommentDto,
+  ): Observable<CommentEntity> {
+    const m = this.httpService.get(
+      `http://${Config.get<AppConfig>('serverBooks').host}:${
+        Config.get<AppConfig>('serverBooks').port
+      }/books/` + createCommentDto.idOfBook,
+    );
+    m.subscribe(
+      (data) => {
+        Logger.log(data.status + ' aaaaa');
+        return this._commentService.create(createCommentDto);
+      },
+      (failure) => {
+        Logger.log('ffffffffffff ' + failure);
+        throwError(
+          () =>
+            new NotFoundException(
+              `No Comment with id'${createCommentDto.idOfBook}'.`,
+            ),
+        );
+      },
+    );
+    return throwError(
+      () =>
+        new NotFoundException(
+          `Cant comment, No Book with id'${createCommentDto.idOfBook}'.`,
+        ),
+    );
+    /*
+      .pipe(map()Map((a: undefined[]) =>
+        !!a && !!a.length
+          ? this._commentService.create(createCommentDto)
+          : throwError(
+              () =>
+                new NotFoundException(
+                  `No book with id'${createCommentDto.idOfBook}'.`,
+                ),
+            ),
+  ),
+        ),
+        
+       */
+    //return
+
+    //return this._commentService.create(createCommentDto);
   }
 }

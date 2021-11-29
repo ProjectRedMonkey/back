@@ -28,6 +28,7 @@ export class UpdateCommentDto {
   @IsNotEmpty()
   @IsNumber()
   upVote?: number; // see if use
+
   @ApiProperty({
     name: 'text',
     description: 'text of the comment',

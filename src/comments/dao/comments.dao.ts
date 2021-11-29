@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from "@nestjs/common";
 import { Model } from 'mongoose';
 
 import { InjectModel } from '@nestjs/mongoose';
 import { defaultIfEmpty, from, Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, tap } from "rxjs/operators";
 import { Comment, CommentDocument } from '../schemas/comment.schema';
 import { UpdateCommentDto } from '../dto/update-comment.dto';
 

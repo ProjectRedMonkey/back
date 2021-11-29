@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 import { Document } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { BookSchema } from '../../books/schemas/book.schema';
 
 export type CommentDocument = Comment & Document;
 
@@ -8,7 +9,6 @@ export type CommentDocument = Comment & Document;
   toJSON: {
     virtuals: true,
     transform: (doc: any, ret: any) => {
-      // delete obsolete data
       delete ret._id;
     },
   },
@@ -53,7 +53,7 @@ export class Comment {
   @Prop({
     type: String,
     required: true,
-    minlength: 1,
+    minlength: 10,
     trim: true,
   })
   text: string;
@@ -64,10 +64,18 @@ export class Comment {
     trim: true,
   })
   upVote: number;
-
+  /*
   @Prop({
     type: mongoose.Schema.Types.ObjectId,
     required: true,
+  })
+  idOfBook: string;
+  
+ */
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'Books',
   })
   idOfBook: string;
 }

@@ -6,7 +6,7 @@ export class CommentEntity {
   @ApiProperty({
     name: 'id',
     description: 'Unique identifier in the database',
-    example: '432dc378a38A2323aze87737',
+    example: '61a4c0121f102776e2cfa9b2',
   })
   @Expose()
   @Type(() => String)
@@ -33,7 +33,7 @@ export class CommentEntity {
   @ApiProperty({
     name: 'date',
     description: 'date of publishing of this comment',
-    example: '11/01/1900',
+    example: '11012000',
   })
   @Expose()
   @Type(() => Number)
@@ -68,7 +68,7 @@ export class CommentEntity {
   @ApiProperty({
     name: 'idOfBook',
     description: 'the id of the commented book',
-    example: '432dc378a38A2323aze87737',
+    example: '61a4c0121f102776e2cfa9b2',
   })
   @Expose()
   @Type(() => String)

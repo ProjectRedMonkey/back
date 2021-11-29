@@ -7,7 +7,7 @@ export class BookEntity {
   @ApiProperty({
     name: 'id',
     description: 'Unique identifier in the database',
-    example: '432dc378a38A2323aze87737',
+    example: '61a4c0121f102776e2cfa9b2',
   })
   @Expose()
   @Type(() => String)
@@ -52,7 +52,7 @@ export class BookEntity {
   @ApiProperty({
     name: 'date',
     description: 'date of publishing of this book',
-    example: '11/01/1900',
+    example: '11012000',
   })
   @Expose()
   @Type(() => Number)
@@ -66,7 +66,7 @@ export class BookEntity {
   @Expose()
   @Type(() => String) // or string ?
   extract: string;
-
+/*
   @ApiProperty({
     name: 'commentsId',
     description:
@@ -78,6 +78,8 @@ export class BookEntity {
   @Type(() => String) // or string ?
   commentsId?: string;
 
+
+ */
   constructor(partial: Partial<BookEntity>) {
     Object.assign(this, partial);
   }

@@ -1,6 +1,7 @@
 import {
   ConflictException,
   Injectable,
+  Logger,
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
@@ -53,7 +54,14 @@ export class CommentsService {
     this.findAll().pipe(
       map((cs: CommentEntity[]) =>
         cs.map((c: CommentEntity) =>
-          c.idOfBook == idBook ? this.delete(c.id) : undefined,
+          c.idOfBook == idBook
+            ? this.delete(c.id).subscribe(() => undefined) &&
+              Logger.log(
+                c.idOfBook + ' deleteddddddddd : ' + idBook + '  ' + c.id,
+              )
+            : Logger.log(
+                c.idOfBook + ' nooooooooooooooo : ' + idBook + '  ' + c.id,
+              ),
         ),
       ),
       map(() => undefined),
@@ -64,6 +72,7 @@ export class CommentsService {
       catchError((e) =>
         throwError(() => new UnprocessableEntityException(e.message)),
       ),
+
       mergeMap((b: Comment) =>
         !!b
           ? of(undefined)
@@ -79,7 +88,7 @@ export class CommentsService {
       catchError((e) =>
         e.code === 11000
           ? throwError(
-              () => new ConflictException(`conflic whith another book`),
+              () => new ConflictException(`conflic whith another comments`),
             )
           : throwError(() => new UnprocessableEntityException(e.message)),
       ),

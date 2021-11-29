@@ -49,7 +49,7 @@ export class UpdateBookDto {
   @ApiProperty({
     name: 'date',
     description: 'date of publishing of this book',
-    example: '11-01-1900',
+    example: '11012000',
   })
   @IsNumber()
   @IsOptional()
@@ -59,21 +59,22 @@ export class UpdateBookDto {
   @ApiProperty({
     name: 'extract',
     description: 'different extract of this book',
-    example: '[il marcher dans la nuit ...] [le soleil se leve avec joi]',
+    example: 'il marcher dans la nuit ...]le soleil se leve avec joi',
   })
   @IsString()
   @IsOptional()
   @IsNotEmpty()
   extract?: string;
-
+  /*
   @ApiProperty({
     name: 'commentsId',
     description:
       '[NumExtract][NumComment]list of all the comments of eatch extract',
-    example: '[1][2] => 23234342323',
+    example: '61a4c0121f102776e2cfa9b2',
   })
   @IsMongoId()
   @IsOptional()
   @IsNotEmpty()
   commentsId?: string;
+*/
 }
