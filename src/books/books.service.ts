@@ -56,7 +56,7 @@ export class BooksService {
     );
 
   create = (book: CreateBookDto): Observable<BookEntity> =>
-    this._addBook(book).pipe(
+    of(book).pipe(
       mergeMap((b: CreateBookDto) => this._booksDao.save(b)),
       catchError((e) =>
         e.code === 11000
@@ -83,13 +83,6 @@ export class BooksService {
           : throwError(() => new NotFoundException(`No Book with id'${id}'.`)),
       ),
     );
-
-  private _addBook = (book: CreateBookDto): Observable<CreateBookDto> =>
-    of({
-      ...book,
-      photo:
-        'https://islandpress.org/sites/default/files/default_book_cover_2015.jpg',
-    });
 
   // private _createId = (): string => `${new Date().getTime()}`;
   /*
