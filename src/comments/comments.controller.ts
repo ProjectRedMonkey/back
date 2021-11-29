@@ -30,7 +30,6 @@ import {
 import { HandlerParams } from '../validators/handler-params';
 import { HttpInterceptor } from '../interceptors/http.interceptor';
 import { AppConfig } from '../app.types';
-import { BookEntity } from '../books/entities/book.entity';
 import { HttpService } from '@nestjs/axios';
 import * as Config from 'config';
 import { map } from 'rxjs/operators';
@@ -143,6 +142,8 @@ export class CommentsController {
   create(
     @Body() createCommentDto: CreateCommentDto,
   ): Observable<CommentEntity> {
+    return this._commentService.create(createCommentDto);
+    /*
     const m = this.httpService.get(
       `http://${Config.get<AppConfig>('serverBooks').host}:${
         Config.get<AppConfig>('serverBooks').port
@@ -155,7 +156,7 @@ export class CommentsController {
       },
       (failure) => {
         Logger.log('ffffffffffff ' + failure);
-        throwError(
+        return throwError(
           () =>
             new NotFoundException(
               `No Comment with id'${createCommentDto.idOfBook}'.`,
@@ -163,26 +164,29 @@ export class CommentsController {
         );
       },
     );
+
     return throwError(
       () =>
         new NotFoundException(
           `Cant comment, No Book with id'${createCommentDto.idOfBook}'.`,
         ),
     );
+
+     */
     /*
-      .pipe(map()Map((a: undefined[]) =>
-        !!a && !!a.length
-          ? this._commentService.create(createCommentDto)
-          : throwError(
-              () =>
-                new NotFoundException(
-                  `No book with id'${createCommentDto.idOfBook}'.`,
+          .pipe(map()Map((a: undefined[]) =>
+            !!a && !!a.length
+              ? this._commentService.create(createCommentDto)
+              : throwError(
+                  () =>
+                    new NotFoundException(
+                      `No book with id'${createCommentDto.idOfBook}'.`,
+                    ),
                 ),
+      ),
             ),
-  ),
-        ),
-        
-       */
+
+           */
     //return
 
     //return this._commentService.create(createCommentDto);
