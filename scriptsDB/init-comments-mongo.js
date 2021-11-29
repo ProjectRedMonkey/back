@@ -61,7 +61,7 @@ comment.forEach(function (element) {
     // update the idOfBook of the comment with the id of the book
     db.getCollection('comments').updateOne(
       { _id: element._id },
-      { $set: { idOfBook: book._id } },
+      { $set: { idOfBook: book._id } }
     );
   } else {
     // if there is no book, we supp the comment
