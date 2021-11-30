@@ -10,6 +10,7 @@ import {
 import { COMMENTS } from '../data/comment';
 import {
   catchError,
+  concatMap,
   defaultIfEmpty,
   find,
   findIndex,
@@ -18,6 +19,7 @@ import {
   mergeMap,
   Observable,
   of,
+  Subscription,
   tap,
   throwError,
 } from 'rxjs';
@@ -98,33 +100,66 @@ export class CommentsService {
       ),
       map((b: Comment) => new CommentEntity(b)),
     );
-
+  /*
   updateIndex = (idBook: string, texts: string[]): Observable<void> =>
     this.findAll().pipe(
+      filter((cs: CommentEntity[]) => !!cs),
       map((cs: CommentEntity[]) =>
-        map((c: CommentEntity) =>
+        cs.map((c: CommentEntity) =>
           c.idOfBook == idBook
             ? this._upp(
                 c,
                 c.start,
                 c.end,
-                texts[0].indexOf(texts[1].slice(c.start, c.end)),
+                texts[0]
+                  .toLowerCase()
+                  .indexOf(texts[1].toLowerCase().slice(c.start, c.end)),
               )
-            : undefined,
+            : Logger.log("no update " + c.idOfBook + " " + idBook),
         ),
       ),
-      map(() => undefined),
+      defaultIfEmpty(undefined),
     );
 
+ */
+
+  updateIndex = (
+    idBook: string,
+    texts: string[],
+  ): Observable<void> =>
+    this.findAll().pipe(
+      tap((cs: CommentEntity[]) =>
+        Logger.log(texts[0] + ' ' + texts[1] + ' ' + cs.length),
+      ),
+      filter((cs: CommentEntity[]) => !!cs),
+      map((cs: CommentEntity[]) => {
+        cs.map((c: CommentEntity) =>
+          this._upp(c, c.start, c.end, texts[0]
+            .toLowerCase()
+            .indexOf(texts[1].toLowerCase().slice(c.start, c.end))
+            , idBook),
+        );
+      }),
+      defaultIfEmpty(undefined),
+    );
   async _upp(
     comment: CommentEntity,
     start: number,
     end: number,
     newStart: number,
+    idBook: string,
   ) {
-    comment.end = newStart - start;
-    comment.start = newStart;
-    this.update(comment.id, comment).subscribe(() => undefined);
+    if (comment.idOfBook == idBook) {
+      if (newStart == -1) {
+        this.delete(comment.id);
+      } else {
+        comment.end = newStart - start;
+        comment.start = newStart;
+        this.update(comment.id, new CommentEntity(comment)).subscribe(
+          () => undefined,
+        );
+      }
+    }
   }
 
   update = (id: string, comment: UpdateCommentDto): Observable<CommentEntity> =>

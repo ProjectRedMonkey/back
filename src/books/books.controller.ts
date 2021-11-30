@@ -1,20 +1,20 @@
 import {
+  BadRequestException,
   Body,
-  ClassSerializerInterceptor,
+  ClassSerializerInterceptor, ConflictException,
   Controller,
   Delete,
-  Get,
-  Logger,
+  Get, Logger,
   Param,
   Post,
   Put,
-  UseInterceptors,
-} from '@nestjs/common';
-import { BooksService } from './books.service';
-import { mergeMap, Observable } from 'rxjs';
-import { CreateBookDto } from './dto/create-book.dto';
-import { UpdateBookDto } from './dto/update-book.dto';
-import * as Config from 'config';
+  UseInterceptors
+} from "@nestjs/common";
+import { BooksService } from "./books.service";
+import { Observable, of, throwError } from "rxjs";
+import { CreateBookDto } from "./dto/create-book.dto";
+import { UpdateBookDto } from "./dto/update-book.dto";
+import * as Config from "config";
 import {
   ApiBadRequestResponse,
   ApiBody,
@@ -24,14 +24,13 @@ import {
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiParam,
-  ApiTags,
-} from '@nestjs/swagger';
-import { HttpInterceptor } from '../interceptors/http.interceptor';
-import { BookEntity } from './entities/book.entity';
-import { HandlerParams } from '../validators/handler-params';
-import { HttpService } from '@nestjs/axios';
-import { AppConfig } from '../app.types';
-import { map, tap } from 'rxjs/operators';
+  ApiTags
+} from "@nestjs/swagger";
+import { HttpInterceptor } from "../interceptors/http.interceptor";
+import { BookEntity } from "./entities/book.entity";
+import { HandlerParams } from "../validators/handler-params";
+import { HttpService } from "@nestjs/axios";
+import { map, tap } from "rxjs/operators";
 
 @ApiTags('books')
 @Controller('books')
@@ -130,14 +129,20 @@ export class BooksController {
     const s = `http://${Config.get<string>('serverComments').host}:${
       Config.get<string>('serverComments').port
     }/comments/up/`;
-    const old = this._bookService
-      .findOne(params.id)
-      .pipe(map((a: BookEntity) => a.extract));
-
+    const l: string[] = updateBookDto.extract.split('//');
+    if(l.length != 2){
+      throwError( () => new BadRequestException(`we need a sting slip with: new // old`))
+    }
+    const old = l[1];
+    updateBookDto.extract = l[0];
+    Logger.log(updateBookDto.extract + ' azezeaz');
     return this._bookService.update(params.id, updateBookDto).pipe(
       tap((c: BookEntity) =>
         this.httpService
-          .put(s + params.id, [c.extract, old])
+          .put(s + params.id, [
+            c.extract,
+            old,
+          ])
           .subscribe(() => undefined),
       ),
       map((c: BookEntity) => c),
