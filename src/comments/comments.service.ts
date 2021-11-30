@@ -123,10 +123,7 @@ export class CommentsService {
 
  */
 
-  updateIndex = (
-    idBook: string,
-    texts: string[],
-  ): Observable<void> =>
+  updateIndex = (idBook: string, texts: string[]): Observable<void> =>
     this.findAll().pipe(
       tap((cs: CommentEntity[]) =>
         Logger.log(texts[0] + ' ' + texts[1] + ' ' + cs.length),
@@ -134,27 +131,32 @@ export class CommentsService {
       filter((cs: CommentEntity[]) => !!cs),
       map((cs: CommentEntity[]) => {
         cs.map((c: CommentEntity) =>
-          this._upp(c, c.start, c.end, texts[0]
-            .toLowerCase()
-            .indexOf(texts[1].toLowerCase().slice(c.start, c.end))
-            , idBook),
+          this._upp(
+            c,
+            texts,
+            idBook,
+          ),
         );
       }),
       defaultIfEmpty(undefined),
     );
   async _upp(
     comment: CommentEntity,
-    start: number,
-    end: number,
-    newStart: number,
+    texts: string[],
     idBook: string,
   ) {
     if (comment.idOfBook == idBook) {
+      var a = texts[1].slice(comment.start, comment.end);
+      Logger.log("sclice " + a);
+      Logger.log("azeae " + texts[0]);
+      var newStart = texts[0].indexOf(a);
+      Logger.log("aaa" + idBook + " " + comment.idOfBook + " " + newStart)
       if (newStart == -1) {
         this.delete(comment.id);
       } else {
-        comment.end = newStart - start;
+        comment.end += newStart - comment.start;
         comment.start = newStart;
+        Logger.log('new : ' + comment.end + ' ' + comment.start);
         this.update(comment.id, new CommentEntity(comment)).subscribe(
           () => undefined,
         );
