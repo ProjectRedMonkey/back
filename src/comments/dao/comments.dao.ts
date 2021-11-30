@@ -50,7 +50,9 @@ export class CommentsDao {
       defaultIfEmpty(undefined),
     );
 
+
   save = (comment: UpdateCommentDto): Observable<Comment> =>
+    // @ts-ignore
     from(new this._commentsModel(comment).save()).pipe(
       map((document: CommentDocument) => document.toJSON()),
     );
