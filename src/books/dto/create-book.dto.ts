@@ -51,9 +51,9 @@ export class CreateBookDto {
     description: 'date of publishing of this book',
     example: '11012000',
   })
-  @IsNumber()
+
   @IsNotEmpty()
-  date: number;
+  date: Date;
 
   @ApiProperty({
     name: 'page',

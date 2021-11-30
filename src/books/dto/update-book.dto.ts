@@ -61,10 +61,10 @@ export class UpdateBookDto {
     description: 'date of publishing of this book',
     example: '11012000',
   })
-  @IsNumber()
+
   @IsOptional()
   @IsNotEmpty()
-  date?: number;
+  date?: Date;
 
   @ApiProperty({
     name: 'extract',

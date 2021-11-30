@@ -55,8 +55,8 @@ export class BookEntity {
     example: '11012000',
   })
   @Expose()
-  @Type(() => Number)
-  date: number;
+  @Type(() => Date)
+  date: Date;
 
   @ApiProperty({
     name: 'extract',
