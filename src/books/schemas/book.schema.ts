@@ -54,7 +54,7 @@ export class Book {
     type: Date,
     required: true,
   })
-  date: number;
+  date: Date;
 
   @Prop({
     type: Number,

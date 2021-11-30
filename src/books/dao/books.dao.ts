@@ -48,7 +48,9 @@ export class BooksDao {
       defaultIfEmpty(undefined),
     );
 
+
   save = (book: UpdateBookDto): Observable<Book> =>
+    // @ts-ignore
     from(new this._booksModel(book).save()).pipe(
       map((document: BookDocument) => document.toJSON()),
     );
