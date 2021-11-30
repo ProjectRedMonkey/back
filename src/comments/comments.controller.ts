@@ -126,6 +126,10 @@ export class CommentsController {
   ): Observable<CommentEntity> {
     return this._commentService.update(params.id, updateCommentDto);
   }
+  @Put('up/:id')
+  updateIndex(@Param() params: HandlerParams, @Body() texts: string[]): Observable<void>{
+    return this._commentService.updateIndex(params.id, texts);
+  }
 
   @ApiCreatedResponse({
     description: 'Successful creat"',

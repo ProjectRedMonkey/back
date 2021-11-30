@@ -127,6 +127,20 @@ export class BooksController {
     @Param() params: HandlerParams,
     @Body() updateBookDto: UpdateBookDto,
   ): Observable<BookEntity> {
-    return this._bookService.update(params.id, updateBookDto);
+    const s = `http://${Config.get<string>('serverComments').host}:${
+      Config.get<string>('serverComments').port
+    }/comments/up/`;
+    const old = this._bookService
+      .findOne(params.id)
+      .pipe(map((a: BookEntity) => a.extract));
+
+    return this._bookService.update(params.id, updateBookDto).pipe(
+      tap((c: BookEntity) =>
+        this.httpService
+          .put(s + params.id, [c.extract, old])
+          .subscribe(() => undefined),
+      ),
+      map((c: BookEntity) => c),
+    );
   }
 }

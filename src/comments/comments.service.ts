@@ -1,8 +1,10 @@
 import {
+  Body,
   ConflictException,
   Injectable,
   Logger,
   NotFoundException,
+  Param,
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { COMMENTS } from '../data/comment';
@@ -25,10 +27,13 @@ import { CommentEntity } from './entities/comment.entity';
 import { filter } from 'rxjs/operators';
 import { Comment } from '../comments/schemas/comment.schema';
 import { CommentsDao } from './dao/comments.dao';
+import { HandlerParams } from '../validators/handler-params';
 
 @Injectable()
 export class CommentsService {
-  constructor(private readonly _commentsDao: CommentsDao) {}
+  constructor(private readonly _commentsDao: CommentsDao) {
+    const l = 0;
+  }
 
   findAll = (): Observable<CommentEntity[] | void> =>
     this._commentsDao.find().pipe(
@@ -93,6 +98,34 @@ export class CommentsService {
       ),
       map((b: Comment) => new CommentEntity(b)),
     );
+
+  updateIndex = (idBook: string, texts: string[]): Observable<void> =>
+    this.findAll().pipe(
+      map((cs: CommentEntity[]) =>
+        map((c: CommentEntity) =>
+          c.idOfBook == idBook
+            ? this._upp(
+                c,
+                c.start,
+                c.end,
+                texts[0].indexOf(texts[1].slice(c.start, c.end)),
+              )
+            : undefined,
+        ),
+      ),
+      map(() => undefined),
+    );
+
+  async _upp(
+    comment: CommentEntity,
+    start: number,
+    end: number,
+    newStart: number,
+  ) {
+    comment.end = newStart - start;
+    comment.start = newStart;
+    this.update(comment.id, comment).subscribe(() => undefined);
+  }
 
   update = (id: string, comment: UpdateCommentDto): Observable<CommentEntity> =>
     this._commentsDao.findOneByIdAndUpdate(id, comment).pipe(
