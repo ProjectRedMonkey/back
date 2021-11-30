@@ -1,4 +1,4 @@
-import { IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsDate, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateCommentDto {
@@ -16,9 +16,9 @@ export class CreateCommentDto {
     description: 'date of the comment',
     example: '11012000',
   })
-  @IsNumber()
+
   @IsNotEmpty()
-  date: number;
+  date: Date;
 
   @ApiProperty({
     name: 'start',

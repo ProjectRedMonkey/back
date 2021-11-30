@@ -36,8 +36,8 @@ export class CommentEntity {
     example: '11012000',
   })
   @Expose()
-  @Type(() => Number)
-  date: number;
+  @Type(() => Date)
+  date: Date;
 
   @ApiProperty({
     name: 'text',

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsDate, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class UpdateCommentDto {
   @ApiProperty({
@@ -16,9 +16,9 @@ export class UpdateCommentDto {
     description: 'date of the comment',
     example: '11012000',
   })
-  @IsNumber()
+
   @IsNotEmpty()
-  date: number;
+  date: Date;
   @ApiProperty({
     name: 'upVote',
     description: 'number of upVote for this comment ',
