@@ -17,6 +17,7 @@ export class UpdateCommentDto {
     example: '11012000',
   })
 
+  @IsOptional()
   @IsNotEmpty()
   date: Date;
   @ApiProperty({
