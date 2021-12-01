@@ -65,14 +65,7 @@ export class Comment {
     trim: true,
   })
   upVote: number;
-  /*
-  @Prop({
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-  })
-  idOfBook: string;
-  
- */
+
   @Prop({
     type: mongoose.Schema.Types.ObjectId,
     required: true,

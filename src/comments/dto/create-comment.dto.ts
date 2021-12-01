@@ -4,8 +4,8 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CreateCommentDto {
   @ApiProperty({
     name: 'author',
-    description: 'author of this comment',
-    example: 'nice part',
+    description: 'Person who wrote the comment',
+    example: 'Charles',
   })
   @IsString()
   @IsNotEmpty()
@@ -13,8 +13,8 @@ export class CreateCommentDto {
 
   @ApiProperty({
     name: 'date',
-    description: 'date of the comment',
-    example: '11012000',
+    description: 'Publication date of the comment',
+    example: '11/01/2000',
   })
 
   @IsNotEmpty()
@@ -23,7 +23,7 @@ export class CreateCommentDto {
   @ApiProperty({
     name: 'start',
     description: 'index of the start of the part of the text comment',
-    example: '22',
+    example: '2',
   })
   @IsNumber()
   @IsNotEmpty()
@@ -40,8 +40,8 @@ export class CreateCommentDto {
 
   @ApiProperty({
     name: 'text',
-    description: 'text of the comment',
-    example: '21',
+    description: 'Comment content',
+    example: 'This part is about love',
   })
   @IsNotEmpty()
   @IsString()
@@ -49,7 +49,7 @@ export class CreateCommentDto {
 
   @ApiProperty({
     name: 'upVote',
-    description: 'number of upVote for this comment ',
+    description: 'Number of upVote given to the comment',
     example: '11',
   })
 
@@ -60,7 +60,7 @@ export class CreateCommentDto {
 
   @ApiProperty({
     name: 'idOfBook',
-    description: 'the id of the book commented',
+    description: 'The id of the book commented',
     example: '61a4c0121f102776e2cfa9b2',
   })
   @IsNotEmpty()

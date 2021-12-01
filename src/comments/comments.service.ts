@@ -94,34 +94,12 @@ export class CommentsService {
       catchError((e) =>
         e.code === 11000
           ? throwError(
-              () => new ConflictException(`conflic whith another comments`),
+              () => new ConflictException(`conflict with another comment`),
             )
           : throwError(() => new UnprocessableEntityException(e.message)),
       ),
       map((b: Comment) => new CommentEntity(b)),
     );
-  /*
-  updateIndex = (idBook: string, texts: string[]): Observable<void> =>
-    this.findAll().pipe(
-      filter((cs: CommentEntity[]) => !!cs),
-      map((cs: CommentEntity[]) =>
-        cs.map((c: CommentEntity) =>
-          c.idOfBook == idBook
-            ? this._upp(
-                c,
-                c.start,
-                c.end,
-                texts[0]
-                  .toLowerCase()
-                  .indexOf(texts[1].toLowerCase().slice(c.start, c.end)),
-              )
-            : Logger.log("no update " + c.idOfBook + " " + idBook),
-        ),
-      ),
-      defaultIfEmpty(undefined),
-    );
-
- */
 
   updateIndex = (idBook: string, texts: string[]): Observable<void> =>
     this.findAll().pipe(
@@ -147,17 +125,12 @@ export class CommentsService {
   ) {
     if (comment.idOfBook == idBook) {
       var a = texts[1].slice(comment.start, comment.end);
-      Logger.log("sclice " + a);
-      Logger.log("azeae " + texts[0]);
       var newStart = texts[0].indexOf(a);
-      Logger.log("aaa" + idBook + " " + comment.idOfBook + " " + newStart)
       if (newStart == -1) {
-        Logger.log("azzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
         this.delete(comment.id).subscribe();
       } else {
         comment.end += newStart - comment.start;
         comment.start = newStart;
-        Logger.log('new : ' + comment.end + ' ' + comment.start);
         this.update(comment.id, new CommentEntity(comment)).subscribe(
           () => undefined,
         );
@@ -170,7 +143,7 @@ export class CommentsService {
       catchError((e) =>
         e.code === 11000
           ? throwError(
-              () => new ConflictException(`conflic whith another comment`),
+              () => new ConflictException(`conflict with another comment`),
             )
           : throwError(() => new UnprocessableEntityException(e.message)),
       ),
@@ -190,24 +163,4 @@ export class CommentsService {
       ...comment,
       upVote: 0,
     });
-  /*
-  private _createId = (): string => `${new Date().getTime()}`;
-  private _findCommentIndex = (id: string): Observable<number> =>
-    from(this._comments).pipe(
-      findIndex((c: Comment) => c.id === id),
-      mergeMap((i: number) =>
-        i >= 0
-          ? of(i)
-          : throwError(
-              () => new NotFoundException(`no comment with id '${id}'.`),
-            ),
-      ),
-    );
-
-  private _parseDate = (date: string): number => {
-    const dates = date.split('/');
-    return new Date(dates[2] + '/' + dates[1] + '/' + dates[0]).getTime();
-  };
-  
- */
 }

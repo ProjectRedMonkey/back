@@ -4,8 +4,8 @@ import { IsDate, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-valida
 export class UpdateCommentDto {
   @ApiProperty({
     name: 'author',
-    description: 'author of this comment',
-    example: 'nice part',
+    description: 'Person who wrote the comment',
+    example: 'Charles',
   })
   @IsString()
   @IsNotEmpty()
@@ -13,17 +13,17 @@ export class UpdateCommentDto {
 
   @ApiProperty({
     name: 'date',
-    description: 'date of the comment',
-    example: '11012000',
+    description: 'Date of the last update of the comment',
+    example: '11/01/2000',
   })
-
   @IsOptional()
   @IsNotEmpty()
   date: Date;
+
   @ApiProperty({
     name: 'upVote',
-    description: 'number of upVote for this comment ',
-    example: '11',
+    description: 'Number of upVote given to the comment',
+    example: '12',
   })
   @IsOptional()
   @IsNotEmpty()
@@ -32,8 +32,8 @@ export class UpdateCommentDto {
 
   @ApiProperty({
     name: 'text',
-    description: 'text of the comment',
-    example: '21',
+    description: 'Comment content',
+    example: 'This part is about madness',
   })
   @IsNotEmpty()
   @IsString()

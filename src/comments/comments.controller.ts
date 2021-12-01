@@ -50,7 +50,7 @@ export class CommentsController {
   @ApiNotFoundResponse({
     description: 'comment with the given "id" doesn\'t exist in the database',
   })
-  @ApiBadRequestResponse({ description: 'Parameter provided is not good' })
+  @ApiBadRequestResponse({ description: 'Parameter provided is wrong' })
   @ApiParam({
     name: 'id',
     description: 'Unique identifier of the comment in the database',
@@ -77,7 +77,7 @@ export class CommentsController {
   @ApiNotFoundResponse({
     description: 'Comment with the given "id" doesn\'t exist in the database',
   })
-  @ApiBadRequestResponse({ description: 'Parameter provided is not good' })
+  @ApiBadRequestResponse({ description: 'Parameter provided is wrong' })
   @ApiParam({
     name: 'id',
     description: 'Unique identifier of the comment in the database',
@@ -93,7 +93,7 @@ export class CommentsController {
   @ApiNotFoundResponse({
     description: 'Comment with the given "id" doesn\'t exist in the database',
   })
-  @ApiBadRequestResponse({ description: 'Parameter provided is not good' })
+  @ApiBadRequestResponse({ description: 'Parameter provided is wrong' })
   @ApiParam({
     name: 'id',
     description: 'Unique identifier of the book',
@@ -111,7 +111,7 @@ export class CommentsController {
   @ApiNotFoundResponse({
     description: 'Comment with the given "id" doesn\'t exist in the database',
   })
-  @ApiBadRequestResponse({ description: 'Parameter provided is not good' })
+  @ApiBadRequestResponse({ description: 'Parameter provided is wrong' })
   @ApiConflictResponse({ description: 'the comment already exists' })
   @ApiParam({
     name: 'id',
@@ -136,7 +136,7 @@ export class CommentsController {
     type: CommentEntity,
   })
   @ApiConflictResponse({ description: 'the comment already exists' })
-  @ApiBadRequestResponse({ description: 'Parameter provided is not good' })
+  @ApiBadRequestResponse({ description: 'Parameter provided is wrong' })
   @ApiBody({
     description: 'Payload to create a new comment',
     type: CreateCommentDto,
@@ -146,52 +146,5 @@ export class CommentsController {
     @Body() createCommentDto: CreateCommentDto,
   ): Observable<CommentEntity> {
     return this._commentService.create(createCommentDto);
-    /*
-    const m = this.httpService.get(
-      `http://${Config.get<AppConfig>('serverBooks').host}:${
-        Config.get<AppConfig>('serverBooks').port
-      }/books/` + createCommentDto.idOfBook,
-    );
-    m.subscribe(
-      (data) => {
-        Logger.log(data.status + ' aaaaa');
-        return this._commentService.create(createCommentDto);
-      },
-      (failure) => {
-        Logger.log('ffffffffffff ' + failure);
-        return throwError(
-          () =>
-            new NotFoundException(
-              `No Comment with id'${createCommentDto.idOfBook}'.`,
-            ),
-        );
-      },
-    );
-
-    return throwError(
-      () =>
-        new NotFoundException(
-          `Cant comment, No Book with id'${createCommentDto.idOfBook}'.`,
-        ),
-    );
-
-     */
-    /*
-          .pipe(map()Map((a: undefined[]) =>
-            !!a && !!a.length
-              ? this._commentService.create(createCommentDto)
-              : throwError(
-                  () =>
-                    new NotFoundException(
-                      `No book with id'${createCommentDto.idOfBook}'.`,
-                    ),
-                ),
-      ),
-            ),
-
-           */
-    //return
-
-    //return this._commentService.create(createCommentDto);
   }
 }

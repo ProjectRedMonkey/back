@@ -15,7 +15,7 @@ export class CommentEntity {
   @ApiProperty({
     name: 'author',
     description: 'author of the comment',
-    example: 'Jaque',
+    example: 'Charles',
   })
   @Expose()
   @Type(() => String)
@@ -23,7 +23,7 @@ export class CommentEntity {
 
   @ApiProperty({
     name: 'upVote',
-    description: 'number of upVote for this comment ',
+    description: 'Number of upVote given to the comment',
     example: '11',
   })
   @Expose()
@@ -32,8 +32,8 @@ export class CommentEntity {
 
   @ApiProperty({
     name: 'date',
-    description: 'date of publishing of this comment',
-    example: '11012000',
+    description: 'Publication date or last update of the comment',
+    example: '11/01/2000',
   })
   @Expose()
   @Type(() => Date)
@@ -41,8 +41,8 @@ export class CommentEntity {
 
   @ApiProperty({
     name: 'text',
-    description: 'text of the comment ',
-    example: 'i like this part of the book',
+    description: 'Comment content',
+    example: 'It\'s about love',
   })
   @Expose()
   @Type(() => String) // or string ?
