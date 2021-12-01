@@ -1,9 +1,9 @@
-import { Injectable, Logger } from "@nestjs/common";
+import { Injectable, Logger } from '@nestjs/common';
 import { Model } from 'mongoose';
 
 import { InjectModel } from '@nestjs/mongoose';
 import { defaultIfEmpty, from, Observable } from 'rxjs';
-import { filter, map, tap } from "rxjs/operators";
+import { filter, map, tap } from 'rxjs/operators';
 import { Comment, CommentDocument } from '../schemas/comment.schema';
 import { UpdateCommentDto } from '../dto/update-comment.dto';
 
@@ -29,6 +29,7 @@ export class CommentsDao {
       map((document: CommentDocument) => document.toJSON()),
       defaultIfEmpty(undefined),
     );
+
   findOneByIdAndUpdate = (
     id: string,
     comment: UpdateCommentDto,
@@ -43,6 +44,7 @@ export class CommentsDao {
       map((document: CommentDocument) => document.toJSON()),
       defaultIfEmpty(undefined),
     );
+
   findByIdAndRemove = (id: string): Observable<Comment | void> =>
     from(this._commentsModel.findByIdAndRemove(id)).pipe(
       filter((document: CommentDocument) => !!document),
@@ -50,10 +52,9 @@ export class CommentsDao {
       defaultIfEmpty(undefined),
     );
 
-
   save = (comment: UpdateCommentDto): Observable<Comment> =>
-    // @ts-ignore
     from(new this._commentsModel(comment).save()).pipe(
       map((document: CommentDocument) => document.toJSON()),
+      defaultIfEmpty(undefined),
     );
 }

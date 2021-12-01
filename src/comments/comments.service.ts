@@ -57,18 +57,15 @@ export class CommentsService {
             ),
       ),
     );
+
+  // delete all the book who comment the spécifique book with id: idBook
   deleteAllFromBook = (idBook: string): Observable<void> =>
     this.findAll().pipe(
       map((cs: CommentEntity[]) =>
         cs.map((c: CommentEntity) =>
           c.idOfBook == idBook
-            ? this.delete(c.id).subscribe(() => undefined) &&
-              Logger.log(
-                c.idOfBook + ' deleteddddddddd : ' + idBook + '  ' + c.id,
-              )
-            : Logger.log(
-                c.idOfBook + ' nooooooooooooooo : ' + idBook + '  ' + c.id,
-              ),
+            ? this.delete(c.id).subscribe(() => undefined)
+            : map(() => undefined),
         ),
       ),
       map(() => undefined),
@@ -100,29 +97,8 @@ export class CommentsService {
       ),
       map((b: Comment) => new CommentEntity(b)),
     );
-  /*
-  updateIndex = (idBook: string, texts: string[]): Observable<void> =>
-    this.findAll().pipe(
-      filter((cs: CommentEntity[]) => !!cs),
-      map((cs: CommentEntity[]) =>
-        cs.map((c: CommentEntity) =>
-          c.idOfBook == idBook
-            ? this._upp(
-                c,
-                c.start,
-                c.end,
-                texts[0]
-                  .toLowerCase()
-                  .indexOf(texts[1].toLowerCase().slice(c.start, c.end)),
-              )
-            : Logger.log("no update " + c.idOfBook + " " + idBook),
-        ),
-      ),
-      defaultIfEmpty(undefined),
-    );
 
- */
-
+  // check for all the comment if they comment the book with idBook
   updateIndex = (idBook: string, texts: string[]): Observable<void> =>
     this.findAll().pipe(
       tap((cs: CommentEntity[]) =>
@@ -130,34 +106,22 @@ export class CommentsService {
       ),
       filter((cs: CommentEntity[]) => !!cs),
       map((cs: CommentEntity[]) => {
-        cs.map((c: CommentEntity) =>
-          this._upp(
-            c,
-            texts,
-            idBook,
-          ),
-        );
+        cs.map((c: CommentEntity) => this._upp(c, texts, idBook));
       }),
       defaultIfEmpty(undefined),
     );
-  async _upp(
-    comment: CommentEntity,
-    texts: string[],
-    idBook: string,
-  ) {
+
+  //update or delete the comment or do nothing
+  async _upp(comment: CommentEntity, texts: string[], idBook: string) {
     if (comment.idOfBook == idBook) {
-      var a = texts[1].slice(comment.start, comment.end);
-      Logger.log("sclice " + a);
-      Logger.log("azeae " + texts[0]);
-      var newStart = texts[0].indexOf(a);
-      Logger.log("aaa" + idBook + " " + comment.idOfBook + " " + newStart)
+      const newStart = texts[0].indexOf(
+        texts[1].slice(comment.start, comment.end),
+      );
       if (newStart == -1) {
-        Logger.log("azzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
         this.delete(comment.id).subscribe();
       } else {
         comment.end += newStart - comment.start;
         comment.start = newStart;
-        Logger.log('new : ' + comment.end + ' ' + comment.start);
         this.update(comment.id, new CommentEntity(comment)).subscribe(
           () => undefined,
         );

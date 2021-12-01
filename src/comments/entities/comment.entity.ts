@@ -5,7 +5,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CommentEntity {
   @ApiProperty({
     name: 'id',
-    description: 'Unique identifier in the database',
+    description: 'Unique identifier of a comment in the database',
     example: '61a4c0121f102776e2cfa9b2',
   })
   @Expose()
@@ -33,7 +33,7 @@ export class CommentEntity {
   @ApiProperty({
     name: 'date',
     description: 'date of publishing of this comment',
-    example: '11012000',
+    example: '2021-12-01T16:53:10.237Z',
   })
   @Expose()
   @Type(() => Date)
@@ -42,10 +42,10 @@ export class CommentEntity {
   @ApiProperty({
     name: 'text',
     description: 'text of the comment ',
-    example: 'i like this part of the book',
+    example: 'i like this part of the book because ...',
   })
   @Expose()
-  @Type(() => String) // or string ?
+  @Type(() => String)
   text: string;
 
   @ApiProperty({
@@ -60,11 +60,12 @@ export class CommentEntity {
   @ApiProperty({
     name: 'end',
     description: 'index of the end of the part of the text comment',
-    example: '21',
+    example: '27',
   })
   @Expose()
   @Type(() => Number)
   end: number;
+
   @ApiProperty({
     name: 'idOfBook',
     description: 'the id of the commented book',

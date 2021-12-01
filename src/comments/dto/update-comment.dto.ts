@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import {
+  IsDateString,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class UpdateCommentDto {
   @ApiProperty({
@@ -14,11 +20,12 @@ export class UpdateCommentDto {
   @ApiProperty({
     name: 'date',
     description: 'date of the comment',
-    example: '11012000',
+    example: '2021-12-01T16:53:10.237Z',
   })
-
+  @IsDateString()
   @IsNotEmpty()
   date: Date;
+
   @ApiProperty({
     name: 'upVote',
     description: 'number of upVote for this comment ',
@@ -27,12 +34,12 @@ export class UpdateCommentDto {
   @IsOptional()
   @IsNotEmpty()
   @IsNumber()
-  upVote?: number; // see if use
+  upVote?: number;
 
   @ApiProperty({
     name: 'text',
     description: 'text of the comment',
-    example: '21',
+    example: 'i like this part of the book because ...',
   })
   @IsNotEmpty()
   @IsString()

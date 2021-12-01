@@ -29,48 +29,61 @@
 ## Installation
 
 ```bash
-$ yarn install
+$ yarn install  
+or
+$ npm install 
 ```
 
-## Normaly no need to do 
-```bash
-$ yarn add fastify-swagger
-```
 ## Running the app
 
 ```bash
 # development
 $ yarn run start
+or
+$ npm 
 
 # watch mode
 $ yarn run start:dev
+or
+$ npm run start:dev
 
 # production mode
 $ yarn run start:prod
+or
+$ npm  run start:prod
 ```
 
-## Test
+#  run the Mongo DataBase
 
+### Start mongo with docker
 ```bash
-# unit tests
-$ yarn run test
+#run your docker image
+sudo docker start 'imageDockerName'
 
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+# check if it run well and note the port
+sudo docker ps
 ```
+# Init your db with Robo3T
 
+##run your app robo3t 
+```bash
+linux: ./"robo3tFileName"/bin/robo3t
+```
+## add new connection
+- address : localhost
+- port: notedPort # exemple 27017
+- save and connect 
+##create and init the collection
+- On the new conection, creat a new dataBase named : projetWebDB
+- Click on your new dataBase and right click on Collection , creat two new Collection named books and comments
+- Click on books and in the zone where is right ```db.getCollection('books').find({})``` supprime all of if and copy past the full code in the file scriptsDB/init-books-mongo.ts and run it by clicking on the big green start Logo. And you do the same with the file scriptsDB/index-books-mongo
+- Click on comments and do the same as befor with the file scriptsDB/init-comments-mongo.ts
+- You have init your to collections, you dan check if it work by juste clicking on books or comments and you will see the ellement you fild in.
+
+# The api is know disponible at the address : http://localhost:3000
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
 ## License
 

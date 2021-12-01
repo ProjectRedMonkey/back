@@ -69,12 +69,6 @@ export class Book {
   })
   category: string;
 
-  /*
-  @Prop({
-    type: mongoose.Schema.Types.ObjectId,
-  })
-  commentsId: string;
-  */
 }
 
 export const BookSchema = SchemaFactory.createForClass(Book);

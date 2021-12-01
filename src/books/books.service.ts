@@ -61,7 +61,7 @@ export class BooksService {
       catchError((e) =>
         e.code === 11000
           ? throwError(
-              () => new ConflictException(`conflic whith another book`),
+              () => new ConflictException(`conflict with another book, same title and other`),
             )
           : throwError(() => new UnprocessableEntityException(e.message)),
       ),
@@ -73,7 +73,7 @@ export class BooksService {
       catchError((e) =>
         e.code === 11000
           ? throwError(
-              () => new ConflictException(`conflic whith another book`),
+              () => new ConflictException(`conflict with another book`),
             )
           : throwError(() => new UnprocessableEntityException(e.message)),
       ),
@@ -83,22 +83,4 @@ export class BooksService {
           : throwError(() => new NotFoundException(`No Book with id'${id}'.`)),
       ),
     );
-
-  // private _createId = (): string => `${new Date().getTime()}`;
-  /*
-  private _findBookIndex = (id: string): Observable<number> =>
-    from(this._books).pipe(
-      findIndex((b: Book) => b.id === id),
-      mergeMap((i: number) =>
-        i >= 0
-          ? of(i)
-          : throwError(() => new NotFoundException(`no book with id '${id}'.`)),
-      ),
-    );
-  private _parseDate = (date: string): number => {
-    const dates = date.split('/');
-    return new Date(dates[2] + '/' + dates[1] + '/' + dates[0]).getTime();
-  };
-  
-   */
 }

@@ -15,7 +15,7 @@ export class BookEntity {
 
   @ApiProperty({
     name: 'photo',
-    description: 'url to a picture of the book',
+    description: 'url to a picture of the book end with jpg or jpeg or jpg or gif or png',
     example: 'https://images-na.ssl-images-amazon.com/images/I/71xwnDO9PBL.jpg',
   })
   @Expose()
@@ -52,7 +52,7 @@ export class BookEntity {
   @ApiProperty({
     name: 'date',
     description: 'date of publishing of this book',
-    example: '11012000',
+    example: '2021-12-01T16:53:10.237Z',
   })
   @Expose()
   @Type(() => Date)
@@ -60,11 +60,11 @@ export class BookEntity {
 
   @ApiProperty({
     name: 'extract',
-    description: 'different extract of this book',
-    example: '[il marcher dans la nuit ...] [le soleil se leve avec joi]',
+    description: 'Extract of this book',
+    example: 'il marcher dans la nuit ... le soleil se leve avec joi',
   })
   @Expose()
-  @Type(() => String) // or string ?
+  @Type(() => String)
   extract: string;
 
   @ApiProperty({

@@ -1,4 +1,6 @@
 import {
+  Contains,
+  IsDateString,
   IsMongoId,
   IsNotEmpty,
   IsNumber,
@@ -13,6 +15,7 @@ export class UpdateBookDto {
     description: 'url of the Book picture ',
     example: 'https://images-na.ssl-images-amazon.com/images/I/71xwnDO9PBL.jpg',
   })
+  @Contains('.jpg' || '.jpeg' || '.gif' || '.png')
   @IsString()
   @IsOptional()
   @IsNotEmpty()
@@ -59,9 +62,9 @@ export class UpdateBookDto {
   @ApiProperty({
     name: 'date',
     description: 'date of publishing of this book',
-    example: '11012000',
+    example: '2021-12-01T16:53:10.237Z',
   })
-
+  @IsDateString()
   @IsOptional()
   @IsNotEmpty()
   date?: Date;
@@ -69,22 +72,10 @@ export class UpdateBookDto {
   @ApiProperty({
     name: 'extract',
     description: 'different extract of this book',
-    example: 'il marcher dans la nuit ...]le soleil se leve avec joi',
+    example: 'il marcher dans la nuit ... le soleil se leve avec joi',
   })
   @IsString()
   @IsOptional()
   @IsNotEmpty()
   extract?: string;
-  /*
-  @ApiProperty({
-    name: 'commentsId',
-    description:
-      '[NumExtract][NumComment]list of all the comments of eatch extract',
-    example: '61a4c0121f102776e2cfa9b2',
-  })
-  @IsMongoId()
-  @IsOptional()
-  @IsNotEmpty()
-  commentsId?: string;
-*/
 }

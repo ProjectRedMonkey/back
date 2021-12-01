@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
-
 import { InjectModel } from '@nestjs/mongoose';
-import { defaultIfEmpty, from, mergeMap, Observable } from 'rxjs';
+import { defaultIfEmpty, from, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { Book, BookDocument } from '../schemas/book.schema';
 import { UpdateBookDto } from '../dto/update-book.dto';
@@ -50,8 +49,8 @@ export class BooksDao {
 
 
   save = (book: UpdateBookDto): Observable<Book> =>
-    // @ts-ignore
     from(new this._booksModel(book).save()).pipe(
       map((document: BookDocument) => document.toJSON()),
+      defaultIfEmpty(undefined),
     );
 }

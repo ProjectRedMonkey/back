@@ -1,6 +1,6 @@
 db.getCollection('comments').insertMany([
   {
-    author: 'charles',
+    author: 'Alexis',
     date: ISODate('1897-01-22T09:00:00Z'),
     start: 9,
     end: 23,
@@ -9,16 +9,16 @@ db.getCollection('comments').insertMany([
     idOfBook: 'Le Seigneur des Anneaux',
   },
   {
-    author: 'Alexis',
+    author: 'chalres',
     date: ISODate('1897-01-22T09:00:00Z'),
-    start: 9,
-    end: 23,
+    start: 895,
+    end: 993,
     upVote: 10, // see if use
-    text: 'il demontre que que dieu est mort mais pas phisiquement',
+    text: 'il démontre que que dieu est mort mais pas physiquement',
     idOfBook: 'ainsi parlait zarathoustra',
   },
   {
-    author: 'charles',
+    author: 'Alexis',
     date: ISODate('1897-01-22T09:00:00Z'),
     start: 22,
     end: 30,

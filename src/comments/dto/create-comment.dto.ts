@@ -1,11 +1,18 @@
-import { IsDate, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import {
+  IsDateString,
+  IsMongoId,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateCommentDto {
   @ApiProperty({
     name: 'author',
     description: 'author of this comment',
-    example: 'nice part',
+    example: 'Charles',
   })
   @IsString()
   @IsNotEmpty()
@@ -14,9 +21,9 @@ export class CreateCommentDto {
   @ApiProperty({
     name: 'date',
     description: 'date of the comment',
-    example: '11012000',
+    example: '2021-12-01T16:53:10.237Z',
   })
-
+  @IsDateString()
   @IsNotEmpty()
   date: Date;
 
@@ -32,7 +39,7 @@ export class CreateCommentDto {
   @ApiProperty({
     name: 'end',
     description: 'index of the end of the part of the text comment',
-    example: '21',
+    example: '28',
   })
   @IsNumber()
   @IsNotEmpty()
@@ -41,7 +48,7 @@ export class CreateCommentDto {
   @ApiProperty({
     name: 'text',
     description: 'text of the comment',
-    example: '21',
+    example: 'i like this part of the book because ...',
   })
   @IsNotEmpty()
   @IsString()
@@ -52,7 +59,6 @@ export class CreateCommentDto {
     description: 'number of upVote for this comment ',
     example: '11',
   })
-
   @IsOptional()
   @IsNotEmpty()
   @IsNumber()

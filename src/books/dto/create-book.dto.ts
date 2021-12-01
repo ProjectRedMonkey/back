@@ -1,5 +1,6 @@
 import {
   Contains,
+  IsDateString,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -49,9 +50,9 @@ export class CreateBookDto {
   @ApiProperty({
     name: 'date',
     description: 'date of publishing of this book',
-    example: '11012000',
+    example: '2021-12-01T16:53:10.237Z',
   })
-
+  @IsDateString()
   @IsNotEmpty()
   date: Date;
 

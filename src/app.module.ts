@@ -1,9 +1,10 @@
-import { Module } from "@nestjs/common";
-import { HttpModule } from "@nestjs/axios";
+import { Module } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
 import { BooksModule } from './books/books.module';
 import { CommentsModule } from './comments/comments.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import * as Config from 'config';
+
 @Module({
   imports: [
     BooksModule,
@@ -12,4 +13,5 @@ import * as Config from 'config';
     HttpModule,
   ],
 })
-export class AppModule {}
+export class AppModule {
+}

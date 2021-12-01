@@ -1,20 +1,22 @@
 import {
   BadRequestException,
   Body,
-  ClassSerializerInterceptor, ConflictException,
+  ClassSerializerInterceptor,
+  ConflictException,
   Controller,
   Delete,
-  Get, Logger,
+  Get,
+  Logger,
   Param,
   Post,
   Put,
-  UseInterceptors
-} from "@nestjs/common";
-import { BooksService } from "./books.service";
-import { Observable, of, throwError } from "rxjs";
-import { CreateBookDto } from "./dto/create-book.dto";
-import { UpdateBookDto } from "./dto/update-book.dto";
-import * as Config from "config";
+  UseInterceptors,
+} from '@nestjs/common';
+import { BooksService } from './books.service';
+import { Observable, of, throwError } from 'rxjs';
+import { CreateBookDto } from './dto/create-book.dto';
+import { UpdateBookDto } from './dto/update-book.dto';
+import * as Config from 'config';
 import {
   ApiBadRequestResponse,
   ApiBody,
@@ -24,13 +26,13 @@ import {
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiParam,
-  ApiTags
-} from "@nestjs/swagger";
-import { HttpInterceptor } from "../interceptors/http.interceptor";
-import { BookEntity } from "./entities/book.entity";
-import { HandlerParams } from "../validators/handler-params";
-import { HttpService } from "@nestjs/axios";
-import { map, tap } from "rxjs/operators";
+  ApiTags,
+} from '@nestjs/swagger';
+import { HttpInterceptor } from '../interceptors/http.interceptor';
+import { BookEntity } from './entities/book.entity';
+import { HandlerParams } from '../validators/handler-params';
+import { HttpService } from '@nestjs/axios';
+import { map, tap } from 'rxjs/operators';
 
 @ApiTags('books')
 @Controller('books')
@@ -85,10 +87,10 @@ export class BooksController {
   })
   @Delete(':id')
   delete(@Param() params: HandlerParams): Observable<void> {
-    const s = `http://${Config.get<string>('serverComments').host}:${
+    const adress = `http://${Config.get<string>('serverComments').host}:${
       Config.get<string>('serverComments').port
     }/comments/allBooks/`;
-    this.httpService.delete(s + params.id).subscribe(() => undefined);
+    this.httpService.delete(adress + params.id).subscribe(() => undefined);
     return this._bookService.delete(params.id);
   }
   @ApiCreatedResponse({
@@ -126,23 +128,22 @@ export class BooksController {
     @Param() params: HandlerParams,
     @Body() updateBookDto: UpdateBookDto,
   ): Observable<BookEntity> {
-    const s = `http://${Config.get<string>('serverComments').host}:${
+    const adress = `http://${Config.get<string>('serverComments').host}:${
       Config.get<string>('serverComments').port
-    }/comments/up/`;
+    }/comments/updateIndex/`;
     const l: string[] = updateBookDto.extract.split('//');
-    if(l.length != 2){
-      throwError( () => new BadRequestException(`we need a sting slip with: new // old`))
+    if (l.length != 2) {
+      throwError(
+        () => new BadRequestException(`we need a sting slip with: new // old`),
+      );
     }
     const old = l[1];
     updateBookDto.extract = l[0];
-    Logger.log(updateBookDto.extract + ' azezeaz');
+
     return this._bookService.update(params.id, updateBookDto).pipe(
       tap((c: BookEntity) =>
         this.httpService
-          .put(s + params.id, [
-            c.extract,
-            old,
-          ])
+          .put(adress + params.id, [c.extract, old])
           .subscribe(() => undefined),
       ),
       map((c: BookEntity) => c),
