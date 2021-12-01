@@ -152,7 +152,8 @@ export class CommentsService {
       var newStart = texts[0].indexOf(a);
       Logger.log("aaa" + idBook + " " + comment.idOfBook + " " + newStart)
       if (newStart == -1) {
-        this.delete(comment.id);
+        Logger.log("azzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
+        this.delete(comment.id).subscribe();
       } else {
         comment.end += newStart - comment.start;
         comment.start = newStart;
