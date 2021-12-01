@@ -1,17 +1,10 @@
-import {
-  IsDateString,
-  IsMongoId,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsDate, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateCommentDto {
   @ApiProperty({
     name: 'author',
-    description: 'author of this comment',
+    description: 'Person who wrote the comment',
     example: 'Charles',
   })
   @IsString()
@@ -20,17 +13,17 @@ export class CreateCommentDto {
 
   @ApiProperty({
     name: 'date',
-    description: 'date of the comment',
-    example: '2021-12-01T16:53:10.237Z',
+    description: 'Publication date of the comment',
+    example: '11/01/2000',
   })
-  @IsDateString()
+
   @IsNotEmpty()
   date: Date;
 
   @ApiProperty({
     name: 'start',
     description: 'index of the start of the part of the text comment',
-    example: '22',
+    example: '2',
   })
   @IsNumber()
   @IsNotEmpty()
@@ -39,7 +32,7 @@ export class CreateCommentDto {
   @ApiProperty({
     name: 'end',
     description: 'index of the end of the part of the text comment',
-    example: '28',
+    example: '21',
   })
   @IsNumber()
   @IsNotEmpty()
@@ -47,8 +40,8 @@ export class CreateCommentDto {
 
   @ApiProperty({
     name: 'text',
-    description: 'text of the comment',
-    example: 'i like this part of the book because ...',
+    description: 'Comment content',
+    example: 'This part is about love',
   })
   @IsNotEmpty()
   @IsString()
@@ -56,9 +49,10 @@ export class CreateCommentDto {
 
   @ApiProperty({
     name: 'upVote',
-    description: 'number of upVote for this comment ',
+    description: 'Number of upVote given to the comment',
     example: '11',
   })
+
   @IsOptional()
   @IsNotEmpty()
   @IsNumber()
@@ -66,7 +60,7 @@ export class CreateCommentDto {
 
   @ApiProperty({
     name: 'idOfBook',
-    description: 'the id of the book commented',
+    description: 'The id of the book commented',
     example: '61a4c0121f102776e2cfa9b2',
   })
   @IsNotEmpty()

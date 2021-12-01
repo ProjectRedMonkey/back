@@ -5,7 +5,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CommentEntity {
   @ApiProperty({
     name: 'id',
-    description: 'Unique identifier of a comment in the database',
+    description: 'Unique identifier in the database',
     example: '61a4c0121f102776e2cfa9b2',
   })
   @Expose()
@@ -15,7 +15,7 @@ export class CommentEntity {
   @ApiProperty({
     name: 'author',
     description: 'author of the comment',
-    example: 'Jaque',
+    example: 'Charles',
   })
   @Expose()
   @Type(() => String)
@@ -23,7 +23,7 @@ export class CommentEntity {
 
   @ApiProperty({
     name: 'upVote',
-    description: 'number of upVote for this comment ',
+    description: 'Number of upVote given to the comment',
     example: '11',
   })
   @Expose()
@@ -32,8 +32,8 @@ export class CommentEntity {
 
   @ApiProperty({
     name: 'date',
-    description: 'date of publishing of this comment',
-    example: '2021-12-01T16:53:10.237Z',
+    description: 'Publication date or last update of the comment',
+    example: '11/01/2000',
   })
   @Expose()
   @Type(() => Date)
@@ -41,11 +41,11 @@ export class CommentEntity {
 
   @ApiProperty({
     name: 'text',
-    description: 'text of the comment ',
-    example: 'i like this part of the book because ...',
+    description: 'Comment content',
+    example: 'It\'s about love',
   })
   @Expose()
-  @Type(() => String)
+  @Type(() => String) // or string ?
   text: string;
 
   @ApiProperty({
@@ -60,12 +60,11 @@ export class CommentEntity {
   @ApiProperty({
     name: 'end',
     description: 'index of the end of the part of the text comment',
-    example: '27',
+    example: '21',
   })
   @Expose()
   @Type(() => Number)
   end: number;
-
   @ApiProperty({
     name: 'idOfBook',
     description: 'the id of the commented book',

@@ -47,7 +47,7 @@ export class CommentsController {
   @ApiNotFoundResponse({
     description: 'comment with the given "id" doesn\'t exist in the database',
   })
-  @ApiBadRequestResponse({ description: 'Parameter provided is not good' })
+  @ApiBadRequestResponse({ description: 'Parameter provided is wrong' })
   @ApiParam({
     name: 'id',
     description: 'Unique identifier of the comment in the database',
@@ -74,7 +74,7 @@ export class CommentsController {
   @ApiNotFoundResponse({
     description: 'Comment with the given "id" doesn\'t exist in the database',
   })
-  @ApiBadRequestResponse({ description: 'Parameter provided is not good' })
+  @ApiBadRequestResponse({ description: 'Parameter provided is wrong' })
   @ApiParam({
     name: 'id',
     description: 'Unique identifier of the comment in the database',
@@ -90,7 +90,7 @@ export class CommentsController {
   @ApiNotFoundResponse({
     description: 'Comment with the given "id" doesn\'t exist in the database',
   })
-  @ApiBadRequestResponse({ description: 'Parameter provided is not good' })
+  @ApiBadRequestResponse({ description: 'Parameter provided is wrong' })
   @ApiParam({
     name: 'id',
     description: 'Unique identifier of the book',
@@ -108,7 +108,7 @@ export class CommentsController {
   @ApiNotFoundResponse({
     description: 'Comment with the given "id" doesn\'t exist in the database',
   })
-  @ApiBadRequestResponse({ description: 'Parameter provided is not good' })
+  @ApiBadRequestResponse({ description: 'Parameter provided is wrong' })
   @ApiConflictResponse({ description: 'the comment already exists' })
   @ApiParam({
     name: 'id',
@@ -157,7 +157,7 @@ export class CommentsController {
     type: CommentEntity,
   })
   @ApiConflictResponse({ description: 'the comment already exists' })
-  @ApiBadRequestResponse({ description: 'Parameter provided is not good' })
+  @ApiBadRequestResponse({ description: 'Parameter provided is wrong' })
   @ApiBody({
     description: 'create a new comment',
     type: CreateCommentDto,

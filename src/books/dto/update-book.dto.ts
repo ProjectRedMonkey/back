@@ -1,6 +1,4 @@
 import {
-  Contains,
-  IsDateString,
   IsMongoId,
   IsNotEmpty,
   IsNumber,
@@ -15,7 +13,6 @@ export class UpdateBookDto {
     description: 'url of the Book picture ',
     example: 'https://images-na.ssl-images-amazon.com/images/I/71xwnDO9PBL.jpg',
   })
-  @Contains('.jpg' || '.jpeg' || '.gif' || '.png')
   @IsString()
   @IsOptional()
   @IsNotEmpty()
@@ -32,7 +29,7 @@ export class UpdateBookDto {
 
   @ApiProperty({
     name: 'page',
-    description: 'page of the extract of the book',
+    description: 'Page where we can find the extract of the book',
     example: '11',
   })
   @IsNumber()
@@ -51,7 +48,7 @@ export class UpdateBookDto {
 
   @ApiProperty({
     name: 'category',
-    description: 'categories of this book',
+    description: 'category of the book',
     example: 'philosophy',
   })
   @IsString()
@@ -61,18 +58,18 @@ export class UpdateBookDto {
 
   @ApiProperty({
     name: 'date',
-    description: 'date of publishing of this book',
-    example: '2021-12-01T16:53:10.237Z',
+    description: 'Publication date of the book',
+    example: '11/01/2000',
   })
-  @IsDateString()
+
   @IsOptional()
   @IsNotEmpty()
   date?: Date;
 
   @ApiProperty({
     name: 'extract',
-    description: 'different extract of this book',
-    example: 'il marcher dans la nuit ... le soleil se leve avec joi',
+    description: 'Extract of the book for analysis',
+    example: 'To be or not to be',
   })
   @IsString()
   @IsOptional()

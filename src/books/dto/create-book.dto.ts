@@ -1,6 +1,5 @@
 import {
   Contains,
-  IsDateString,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -11,7 +10,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CreateBookDto {
   @ApiProperty({
     name: 'photo',
-    description: 'url of the Book picture ',
+    description: 'url of the book\'s picture ',
     example: 'https://images-na.ssl-images-amazon.com/images/I/71xwnDO9PBL.jpg',
   })
   @Contains('.jpg' || '.jpeg' || '.gif' || '.png')
@@ -23,7 +22,7 @@ export class CreateBookDto {
   @ApiProperty({
     name: 'title',
     description: 'title of the book',
-    example: 'Voyage au bout de la nuit',
+    example: 'Harry Potter',
   })
   @IsString()
   @IsNotEmpty()
@@ -32,7 +31,7 @@ export class CreateBookDto {
   @ApiProperty({
     name: 'author',
     description: 'author of the book',
-    example: 'Celine',
+    example: 'J. K. K. Rowling',
   })
   @IsString()
   @IsNotEmpty()
@@ -40,7 +39,7 @@ export class CreateBookDto {
 
   @ApiProperty({
     name: 'category',
-    description: 'categories of this book',
+    description: 'category of the book',
     example: 'philosophy',
   })
   @IsString()
@@ -49,16 +48,16 @@ export class CreateBookDto {
 
   @ApiProperty({
     name: 'date',
-    description: 'date of publishing of this book',
-    example: '2021-12-01T16:53:10.237Z',
+    description: 'Publication date of the book',
+    example: '11/01/2000',
   })
-  @IsDateString()
+
   @IsNotEmpty()
   date: Date;
 
   @ApiProperty({
     name: 'page',
-    description: 'page of the extract of the book',
+    description: 'Page where we can find the extract of the book',
     example: '11',
   })
   @IsNumber()
@@ -67,8 +66,8 @@ export class CreateBookDto {
 
   @ApiProperty({
     name: 'extract',
-    description: 'different extract of this book',
-    example: '[il marcher dans la nuit ...] [le soleil se leve avec joi]',
+    description: 'Extract of the book for analysis',
+    example: 'To be or not to be',
   })
   @IsString()
   @IsNotEmpty()

@@ -51,7 +51,7 @@ export class BooksController {
   @ApiNotFoundResponse({
     description: 'Book with the given "id" doesn\'t exist in the database',
   })
-  @ApiBadRequestResponse({ description: 'Parameter provided is not good' })
+  @ApiBadRequestResponse({ description: 'Parameter provided is wrong' })
   @ApiParam({
     name: 'id',
     description: 'Unique identifier of the book in the database',
@@ -64,7 +64,7 @@ export class BooksController {
   }
 
   @ApiOkResponse({
-    description: 'Returns all the book in the DB',
+    description: 'Returns all books in the DB',
     type: BookEntity,
     isArray: true,
   })
@@ -74,11 +74,11 @@ export class BooksController {
     return this._bookService.findAll();
   }
 
-  @ApiNoContentResponse({ description: 'Successful delete' })
+  @ApiNoContentResponse({ description: 'Successful deletion' })
   @ApiNotFoundResponse({
     description: 'Book with the given "id" doesn\'t exist in the database',
   })
-  @ApiBadRequestResponse({ description: 'Parameter provided is not good' })
+  @ApiBadRequestResponse({ description: 'Parameter provided is wrong' })
   @ApiParam({
     name: 'id',
     description: 'Unique identifier of the book in the database',
@@ -94,11 +94,11 @@ export class BooksController {
     return this._bookService.delete(params.id);
   }
   @ApiCreatedResponse({
-    description: 'Successful creat"',
+    description: 'Successful creation"',
     type: BookEntity,
   })
-  @ApiConflictResponse({ description: 'the book already exists' })
-  @ApiBadRequestResponse({ description: 'Parameter provided is not good' })
+  @ApiConflictResponse({ description: 'The book already exists' })
+  @ApiBadRequestResponse({ description: 'Parameter provided is wrong' })
   @ApiBody({
     description: 'Payload to create a new book',
     type: CreateBookDto,
@@ -115,8 +115,8 @@ export class BooksController {
   @ApiNotFoundResponse({
     description: 'Book with the given "id" doesn\'t exist in the database',
   })
-  @ApiBadRequestResponse({ description: 'Parameter provided is not good' })
-  @ApiConflictResponse({ description: 'the book already exists' })
+  @ApiBadRequestResponse({ description: 'Parameter provided is wrong' })
+  @ApiConflictResponse({ description: 'The book already exists' })
   @ApiParam({
     name: 'id',
     description: 'Unique identifier of the book in the database',
